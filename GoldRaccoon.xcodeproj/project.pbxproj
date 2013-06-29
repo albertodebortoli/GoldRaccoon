@@ -32,6 +32,7 @@
 		D3622E43177F3B6A009DEEEB /* LICENSE.markdown in Resources */ = {isa = PBXBuildFile; fileRef = D3622E42177F3B6A009DEEEB /* LICENSE.markdown */; };
 		D3622E45177F3C55009DEEEB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622E44177F3C55009DEEEB /* CFNetwork.framework */; };
 		D3622E49177F64B4009DEEEB /* GRQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E48177F64B3009DEEEB /* GRQueue.m */; };
+		D3622E4C177F6728009DEEEB /* GRRequestsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E4B177F6727009DEEEB /* GRRequestsManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,9 @@
 		D3622E46177F4F89009DEEEB /* GRRequestProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestProtocol.h; sourceTree = "<group>"; };
 		D3622E47177F64B3009DEEEB /* GRQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRQueue.h; sourceTree = "<group>"; };
 		D3622E48177F64B3009DEEEB /* GRQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRQueue.m; sourceTree = "<group>"; };
+		D3622E4A177F6727009DEEEB /* GRRequestsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestsManager.h; sourceTree = "<group>"; };
+		D3622E4B177F6727009DEEEB /* GRRequestsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestsManager.m; sourceTree = "<group>"; };
+		D3622E4D177F6752009DEEEB /* GRRequestsManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestsManagerProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,9 @@
 		D3622E25177F3AA7009DEEEB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D3622E4D177F6752009DEEEB /* GRRequestsManagerProtocol.h */,
+				D3622E4A177F6727009DEEEB /* GRRequestsManager.h */,
+				D3622E4B177F6727009DEEEB /* GRRequestsManager.m */,
 				D3622E47177F64B3009DEEEB /* GRQueue.h */,
 				D3622E48177F64B3009DEEEB /* GRQueue.m */,
 				D3622E26177F3AA7009DEEEB /* GRGlobal.h */,
@@ -341,6 +348,7 @@
 				D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */,
 				D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */,
 				D3622E49177F64B4009DEEEB /* GRQueue.m in Sources */,
+				D3622E4C177F6728009DEEEB /* GRRequestsManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
