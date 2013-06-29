@@ -24,8 +24,6 @@
 @synthesize maximumSize;
 @synthesize percentCompleted;
 
-@synthesize nextRequest;
-@synthesize prevRequest;
 @synthesize delegate;
 @synthesize streamInfo;
 @synthesize didOpenStream;

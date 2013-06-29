@@ -36,8 +36,6 @@
 @property float percentCompleted;
 @property long timeout;
 
-@property GRRequest *nextRequest;
-@property GRRequest *prevRequest;
 @property GRStreamInfo *streamInfo;
 @property BOOL didOpenStream;               // whether the stream opened or not
 @property (readonly) long bytesSent;        // will have bytes from the last FTP call

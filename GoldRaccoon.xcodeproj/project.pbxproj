@@ -27,7 +27,6 @@
 		D3622E3C177F3AA7009DEEEB /* GRRequestDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E2E177F3AA7009DEEEB /* GRRequestDownload.m */; };
 		D3622E3D177F3AA7009DEEEB /* GRRequestError.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E30177F3AA7009DEEEB /* GRRequestError.m */; };
 		D3622E3E177F3AA7009DEEEB /* GRRequestListDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */; };
-		D3622E3F177F3AA7009DEEEB /* GRRequestQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */; };
 		D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */; };
 		D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */; };
 		D3622E43177F3B6A009DEEEB /* LICENSE.markdown in Resources */ = {isa = PBXBuildFile; fileRef = D3622E42177F3B6A009DEEEB /* LICENSE.markdown */; };
@@ -78,8 +77,6 @@
 		D3622E30177F3AA7009DEEEB /* GRRequestError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestError.m; sourceTree = "<group>"; };
 		D3622E31177F3AA7009DEEEB /* GRRequestListDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestListDirectory.h; sourceTree = "<group>"; };
 		D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestListDirectory.m; sourceTree = "<group>"; };
-		D3622E33177F3AA7009DEEEB /* GRRequestQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestQueue.h; sourceTree = "<group>"; };
-		D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestQueue.m; sourceTree = "<group>"; };
 		D3622E35177F3AA7009DEEEB /* GRRequestUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestUpload.h; sourceTree = "<group>"; };
 		D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestUpload.m; sourceTree = "<group>"; };
 		D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRStreamInfo.h; sourceTree = "<group>"; };
@@ -208,8 +205,6 @@
 				D3622E30177F3AA7009DEEEB /* GRRequestError.m */,
 				D3622E31177F3AA7009DEEEB /* GRRequestListDirectory.h */,
 				D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */,
-				D3622E33177F3AA7009DEEEB /* GRRequestQueue.h */,
-				D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */,
 				D3622E35177F3AA7009DEEEB /* GRRequestUpload.h */,
 				D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */,
 				D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */,
@@ -338,7 +333,6 @@
 				D3622E3C177F3AA7009DEEEB /* GRRequestDownload.m in Sources */,
 				D3622E3D177F3AA7009DEEEB /* GRRequestError.m in Sources */,
 				D3622E3E177F3AA7009DEEEB /* GRRequestListDirectory.m in Sources */,
-				D3622E3F177F3AA7009DEEEB /* GRRequestQueue.m in Sources */,
 				D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */,
 				D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */,
 			);
