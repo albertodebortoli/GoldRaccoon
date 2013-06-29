@@ -21,7 +21,7 @@
  */
 - (NSString *)path
 {
-    NSString * lastCharacter = [path substringFromIndex:[path length] - 1];
+    NSString *lastCharacter = [_path substringFromIndex:[_path length] - 1];
     isDirectory = ([lastCharacter isEqualToString:@"/"]);
     
     if (!isDirectory) {

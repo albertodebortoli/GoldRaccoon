@@ -86,6 +86,7 @@
 		D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRStreamInfo.m; sourceTree = "<group>"; };
 		D3622E42177F3B6A009DEEEB /* LICENSE.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.markdown; sourceTree = "<group>"; };
 		D3622E44177F3C55009DEEEB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		D3622E46177F4F89009DEEEB /* GRRequestProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				D3622E26177F3AA7009DEEEB /* GRGlobal.h */,
+				D3622E46177F4F89009DEEEB /* GRRequestProtocol.h */,
 				D3622E27177F3AA7009DEEEB /* GRRequest.h */,
 				D3622E28177F3AA7009DEEEB /* GRRequest.m */,
 				D3622E29177F3AA7009DEEEB /* GRRequestCreateDirectory.h */,

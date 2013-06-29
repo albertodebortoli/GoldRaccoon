@@ -13,74 +13,21 @@
 //
 
 #import "GRGlobal.h"
+#import "GRRequestProtocol.h"
 #import "GRRequestError.h"
 #import "GRStreamInfo.h"
 
 @class GRRequest;
 @class GRRequestDownload;
 @class GRRequestUpload;
-@protocol GRRequestDelegate  <NSObject>
 
-@required
-/**
- @param request The request object
- */
-- (void)requestCompleted:(GRRequest *)request;
-
-/**
- @param request The request object
- */
-- (void)requestFailed:(GRRequest *)request;
-
-/**
- @param request The request object
- */
-- (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request;
-
-@optional
-- (void)percentCompleted:(GRRequest *) request;
-- (void)requestDataAvailable:(GRRequestDownload *)request;
-- (long)requestDataSendSize:(GRRequestUpload *)request;
-- (NSData *)requestDataToSend:(GRRequestUpload *)request;
-@end
-
-@interface GRRequest : NSObject <NSStreamDelegate>
+@interface GRRequest : NSObject <NSStreamDelegate, GRRequestProtocol>
 {
-@protected
-    NSString * path;
-    NSString * hostname;
-    
-    GRRequestError *error;
+    NSString *_path;
 }
 
-@property BOOL passiveMode;
-@property NSString *uuid;
-
-@property NSString *username;
-@property NSString *password;
-@property NSString *hostname;
-
-@property (readonly) NSURL *fullURL;
-@property NSString *path;
-@property (strong) GRRequestError *error;
-@property float maximumSize;
-@property float percentCompleted;
-@property long timeout;
-
-@property GRRequest *nextRequest;
-@property GRRequest *prevRequest;
-@property (weak) id <GRRequestDelegate> delegate;
-@property  GRStreamInfo *streamInfo;
-@property BOOL didOpenStream;               // whether the stream opened or not
-@property (readonly) long bytesSent;        // will have bytes from the last FTP call
-@property (readonly) long totalBytesSent;   // will have bytes total sent
-@property BOOL cancelDoesNotCallDelegate;   // cancel closes stream without calling delegate
-
-- (NSURL *)fullURLWithEscape;
+@property (nonatomic, weak) id <GRRequestDelegate> delegate;
 
 - (instancetype)initWithDelegate:(id)delegate;
-
-- (void)start;
-- (void)cancelRequest;
 
 @end

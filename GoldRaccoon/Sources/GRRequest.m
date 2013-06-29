@@ -30,6 +30,9 @@
 @synthesize streamInfo;
 @synthesize didOpenStream;
 
+@synthesize path = _path;
+@synthesize hostname = _hostname;
+
 /**
  
  */
@@ -55,6 +58,8 @@
     }
     return self;
 }
+
+#pragma mark - GRRequestProtocol
 
 /**
  
@@ -99,7 +104,7 @@
 {
     // we remove all the extra slashes from the directory path, including the last one (if there is one)
     // we also escape it
-    NSString * escapedPath = [path stringByStandardizingPath];
+    NSString * escapedPath = [_path stringByStandardizingPath];
     
     // we need the path to be absolute, if it's not, we *make* it
     if ([escapedPath isAbsolutePath] == NO) {
@@ -117,7 +122,7 @@
  */
 - (void)setPath:(NSString *)directoryPathLocal
 {
-    path = directoryPathLocal;
+    _path = directoryPathLocal;
 }
 
 /**
@@ -125,7 +130,7 @@
  */
 - (NSString *)hostname
 {
-    return [hostname stringByStandardizingPath];
+    return [_hostname stringByStandardizingPath];
 }
 
 /**
@@ -133,7 +138,7 @@
  */
 - (void)setHostname:(NSString *)hostnamelocal
 {
-    hostname = hostnamelocal;
+    _hostname = hostnamelocal;
 }
 
 /**
