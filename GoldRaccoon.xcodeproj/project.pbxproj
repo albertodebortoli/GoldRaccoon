@@ -53,6 +53,7 @@
 		D3622E15177F3357009DEEEB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3622E17177F3357009DEEEB /* GoldRaccoonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoldRaccoonTests.h; sourceTree = "<group>"; };
 		D3622E18177F3357009DEEEB /* GoldRaccoonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoldRaccoonTests.m; sourceTree = "<group>"; };
+		D3622E23177F3854009DEEEB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +83,7 @@
 		D3622DE1177F3357009DEEEB = {
 			isa = PBXGroup;
 			children = (
+				D3622E23177F3854009DEEEB /* README.md */,
 				D3622DF3177F3357009DEEEB /* GoldRaccoon */,
 				D3622E11177F3357009DEEEB /* GoldRaccoonTests */,
 				D3622DEC177F3357009DEEEB /* Frameworks */,
