@@ -1,5 +1,5 @@
 //
-//  GRRequestDelete.m
+//  GRDeleteRequest.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,9 +12,9 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestDelete.h"
+#import "GRDeleteRequest.h"
 
-@implementation GRRequestDelete
+@implementation GRDeleteRequest
 
 /**
  
@@ -22,7 +22,7 @@
 - (NSString *)path
 {
     NSString *lastCharacter = [_path substringFromIndex:[_path length] - 1];
-    isDirectory = ([lastCharacter isEqualToString:@"/"]);
+    BOOL isDirectory = ([lastCharacter isEqualToString:@"/"]);
     
     if (!isDirectory) {
         return [super path];
@@ -55,7 +55,7 @@
     
     else {
         // unsuccessful        
-        [self.streamInfo streamError:self errorCode: kGRFTPClientCantDeleteFileOrDirectory];
+        [self.streamInfo streamError:self errorCode:kGRFTPClientCantDeleteFileOrDirectory];
     }
 }
 

@@ -13,6 +13,9 @@
 //
 
 #import "GRGlobal.h"
+#import "GRError.h"
+
+#define kGRDefaultBufferSize 32768
 
 @class GRRequest;
 

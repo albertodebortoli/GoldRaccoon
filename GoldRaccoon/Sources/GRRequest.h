@@ -14,12 +14,12 @@
 
 #import "GRGlobal.h"
 #import "GRRequestProtocol.h"
-#import "GRRequestError.h"
+#import "GRError.h"
 #import "GRStreamInfo.h"
 
 @class GRRequest;
-@class GRRequestDownload;
-@class GRRequestUpload;
+@class GRDownloadRequest;
+@class GRUploadRequest;
 
 @interface GRRequest : NSObject <NSStreamDelegate, GRRequestProtocol>
 {

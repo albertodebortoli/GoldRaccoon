@@ -1,5 +1,5 @@
 //
-//  GRRequestDownload.m
+//  GRDownloadRequest.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,27 +12,34 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestDownload.h"
+#import "GRDownloadRequest.h"
 
-@implementation GRRequestDownload
+@interface GRDownloadRequest ()
+
+@property NSData *receivedData;
+
+@end
+
+@implementation GRDownloadRequest
 
 @synthesize receivedData;
+@synthesize localFilepath;
+@synthesize fullRemotePath;
 
 /**
  
  */
 - (void)start
 {
-    if (![self.delegate respondsToSelector:@selector(requestDataAvailable:)])
-    {
-        [self.streamInfo streamError: self errorCode: kGRFTPClientMissingRequestDataAvailable];
+    if ([self.delegate respondsToSelector:@selector(dataAvailable:forRequest:)] == NO) {
+        [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
         InfoLog(@"%@", self.error.message);
         return;
     }
     
     // open the read stream and check for errors calling delegate methods
     // if things fail. This encapsulates the streamInfo object and cleans up our code.
-    [self.streamInfo openRead: self];
+    [self.streamInfo openRead:self];
 }
 
 /**
@@ -41,13 +48,12 @@
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
     // see if we have cancelled the runloop
-    if ([self.streamInfo checkCancelRequest: self])
+    if ([self.streamInfo checkCancelRequest:self])
         return;
     
     switch (streamEvent) {
         case NSStreamEventOpenCompleted: {
             self.maximumSize = [[theStream propertyForKey:(id)kCFStreamPropertyFTPResourceSize] integerValue];
-            
             self.didOpenStream = YES;
             self.streamInfo.bytesTotal = 0;
             self.receivedData = [NSMutableData data];
@@ -55,14 +61,14 @@
         break;
             
         case NSStreamEventHasBytesAvailable: {
-            self.receivedData = [self.streamInfo read: self];
+            self.receivedData = [self.streamInfo read:self];
             
             if (self.receivedData) {
-                [self.delegate requestDataAvailable: self];
+                [self.delegate dataAvailable:self.receivedData forRequest:self];
             }
             else {
                 InfoLog(@"Stream opened, but failed while trying to read from it.");
-                [self.streamInfo streamError: self errorCode: kGRFTPClientCantReadStream];
+                [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         } 
         break;
@@ -73,13 +79,13 @@
         break;
             
         case NSStreamEventErrorOccurred: {
-            [self.streamInfo streamError: self errorCode: [GRRequestError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
             InfoLog(@"%@", self.error.message);
         }
         break;
             
         case NSStreamEventEndEncountered: {
-            [self.streamInfo streamComplete: self];
+            [self.streamInfo streamComplete:self];
         }
         break;
 

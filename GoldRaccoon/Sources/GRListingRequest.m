@@ -1,5 +1,5 @@
 //
-//  GRRequestListDirectory.m
+//  GRListingRequest.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,9 +12,15 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestListDirectory.h"
+#import "GRListingRequest.h"
 
-@implementation GRRequestListDirectory
+@interface GRListingRequest ()
+
+@property (nonatomic, strong) NSMutableData *receivedData;
+
+@end
+
+@implementation GRListingRequest
 
 @synthesize filesInfo;
 @synthesize receivedData;
@@ -26,11 +32,9 @@
 {
     NSString *fileName = [[fileNamePath lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
     
-    for (NSDictionary *file in self.filesInfo)
-    {
+    for (NSDictionary *file in self.filesInfo) {
         NSString * name = [file objectForKey:(id)kCFFTPResourceName];
-        if ([fileName isEqualToString:name])
-        {
+        if ([fileName isEqualToString:name]) {
             return YES;
         }
     }
@@ -45,8 +49,7 @@
 {
     // the path will always point to a directory, so we add the final slash to it (if there was one before escaping/standardizing, it's *gone* now)
     NSString * directoryPath = [super path];
-    if (![directoryPath hasSuffix: @"/"]) 
-    {
+    if (![directoryPath hasSuffix: @"/"]) {
         directoryPath = [directoryPath stringByAppendingString:@"/"];
     }
     return directoryPath;
@@ -61,7 +64,7 @@
     
     // open the read stream and check for errors calling delegate methods
     // if things fail. This encapsulates the streamInfo object and cleans up our code.
-    [self.streamInfo openRead: self];
+    [self.streamInfo openRead:self];
 }
 
 /**
@@ -79,14 +82,14 @@
         } break;
             
         case NSStreamEventHasBytesAvailable: {
-            data = [self.streamInfo read: self];
+            data = [self.streamInfo read:self];
             
             if (data) {
                 [self.receivedData appendData: data];
             }
             else {
                 InfoLog(@"Stream opened, but failed while trying to read from it.");
-                [self.streamInfo streamError: self errorCode: kGRFTPClientCantReadStream];
+                [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         }
         break;
@@ -97,7 +100,7 @@
         break;
             
         case NSStreamEventErrorOccurred: {
-            [self.streamInfo streamError: self errorCode: [GRRequestError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
             InfoLog(@"%@", self.error.message);
         }
         break;
@@ -133,7 +136,7 @@
                 
             } while (parsedBytes > 0);
 
-            [self.streamInfo streamComplete: self];                             // perform callbacks and close out streams
+            [self.streamInfo streamComplete:self];                             // perform callbacks and close out streams
         }
         break;
         

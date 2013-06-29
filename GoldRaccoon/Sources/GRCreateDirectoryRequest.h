@@ -1,5 +1,5 @@
 //
-//  GRRequestListDirectory.h
+//  GRCreateDirectoryRequest.h
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -13,13 +13,8 @@
 //
 
 #import "GRGlobal.h"
-#import "GRRequest.h"
+#import "GRListingRequest.h"
 
-@interface GRRequestListDirectory : GRRequest
-
-@property NSArray *filesInfo;
-@property (strong) NSMutableData *receivedData;
-
-- (BOOL)fileExists:(NSString *)fileNamePath;
+@interface GRCreateDirectoryRequest : GRRequest
 
 @end

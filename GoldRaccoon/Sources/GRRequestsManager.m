@@ -8,11 +8,11 @@
 
 #import "GRRequestsManager.h"
 
-#import "GRRequestListDirectory.h"
-#import "GRRequestCreateDirectory.h"
-#import "GRRequestUpload.h"
-#import "GRRequestDownload.h"
-#import "GRRequestDelete.h"
+#import "GRListingRequest.h"
+#import "GRCreateDirectoryRequest.h"
+#import "GRUploadRequest.h"
+#import "GRDownloadRequest.h"
+#import "GRDeleteRequest.h"
 
 #import "GRQueue.h"
 
@@ -119,36 +119,36 @@
 
 #pragma mark - FTP Actions
 
-- (GRRequestCreateDirectory *)addRequestForCreateDirectoryAtPath:(NSString *)path
+- (GRCreateDirectoryRequest *)addRequestForCreateDirectoryAtPath:(NSString *)path
 {
-    GRRequestCreateDirectory *request = [[GRRequestCreateDirectory alloc] initWithDelegate:self datasource:self];
+    GRCreateDirectoryRequest *request = [[GRCreateDirectoryRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
     return request;
 }
 
-- (GRRequestDelete *)addRequestForDeleteDirectoryAtPath:(NSString *)path
+- (GRDeleteRequest *)addRequestForDeleteDirectoryAtPath:(NSString *)path
 {
-    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self datasource:self];
+    GRDeleteRequest *request = [[GRDeleteRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
     return request;
 }
 
-- (GRRequestListDirectory *)addRequestForListDirectoryAtPath:(NSString *)path
+- (GRListingRequest *)addRequestForListDirectoryAtPath:(NSString *)path
 {
-    GRRequestListDirectory *request = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
+    GRListingRequest *request = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
     return request;
 }
 
-- (GRRequestDownload *)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
+- (GRDownloadRequest *)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
 {
-    GRRequestDownload *request = [[GRRequestDownload alloc] initWithDelegate:self datasource:self];
+    GRDownloadRequest *request = [[GRDownloadRequest alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
     request.localFilepath = localPath;
     
@@ -156,9 +156,9 @@
     return request;
 }
 
-- (GRRequestUpload *)addRequestForUploadFileAtLocalPath:(NSString *)localPath toRemotePath:(NSString *)remotePath
+- (GRUploadRequest *)addRequestForUploadFileAtLocalPath:(NSString *)localPath toRemotePath:(NSString *)remotePath
 {
-    GRRequestUpload *request = [[GRRequestUpload alloc] initWithDelegate:self datasource:self];
+    GRUploadRequest *request = [[GRUploadRequest alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
     request.localFilepath = localPath;
     
@@ -166,9 +166,9 @@
     return request;
 }
 
-- (GRRequestDelete *)addRequestForDeleteFileAtPath:(NSString *)filepath
+- (GRDeleteRequest *)addRequestForDeleteFileAtPath:(NSString *)filepath
 {
-    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self datasource:self];
+    GRDeleteRequest *request = [[GRDeleteRequest alloc] initWithDelegate:self datasource:self];
     request.path = filepath;
     
     [self _enqueueRequest:request];
@@ -179,28 +179,28 @@
 
 - (void)requestCompleted:(GRRequest *)request
 {
-    if ([request isKindOfClass:[GRRequestUpload class]]) {
+    if ([request isKindOfClass:[GRUploadRequest class]]) {
         if (_delegateRespondsToUploadCompletion) {
-            [self.delegate requestsManager:self didCompleteRequestUpload:(GRRequestUpload *)request];
+            [self.delegate requestsManager:self didCompleteRequestUpload:(GRUploadRequest *)request];
         }
         _currentUploadData = nil;
     }
     
-    else if ([request isKindOfClass:[GRRequestDownload class]]) {
+    else if ([request isKindOfClass:[GRDownloadRequest class]]) {
         NSError *writeError = nil;
-        BOOL writeToFileSucceeded = [_currentDownloadData writeToFile:((GRRequestDownload *)request).localFilepath
+        BOOL writeToFileSucceeded = [_currentDownloadData writeToFile:((GRDownloadRequest *)request).localFilepath
                                                               options:NSDataWritingAtomic
                                                                 error:&writeError];
         
         if (writeToFileSucceeded && !writeError) {
             if (_delegateRespondsToDownloadCompletion) {
-                [self.delegate requestsManager:self didCompleteRequestDownload:(GRRequestDownload *)request];
+                [self.delegate requestsManager:self didCompleteRequestDownload:(GRDownloadRequest *)request];
             }
         }
         else {
             if (_delegateRespondsToWritingFailure) {
                 [self.delegate requestsManager:self
-                      didFailWritingFileAtPath:((GRRequestDownload *)request).localFilepath
+                      didFailWritingFileAtPath:((GRDownloadRequest *)request).localFilepath
                                     forRequest:request
                                          error:writeError];
             }
@@ -208,14 +208,14 @@
         _currentDownloadData = nil;
     }
     
-    else if ([request isKindOfClass:[GRRequestListDirectory class]]) {
+    else if ([request isKindOfClass:[GRListingRequest class]]) {
         NSMutableArray *listing = [NSMutableArray array];
-        for (NSDictionary *file in ((GRRequestListDirectory *)request).filesInfo) {
+        for (NSDictionary *file in ((GRListingRequest *)request).filesInfo) {
             [listing addObject:[file objectForKey:(id)kCFFTPResourceName]];
         }
         if (_delegateRespondsToListDirectoryCompletion) {
             [self.delegate requestsManager:self
-                 didCompleteRequestListing:((GRRequestListDirectory *)request)
+                 didCompleteRequestListing:((GRListingRequest *)request)
                                    listing:listing];
         }
     }
@@ -237,7 +237,7 @@
 
 - (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request
 {
-    // called only with GRRequestUpload requests
+    // called only with GRUploadRequest requests
     return YES;
 }
 
@@ -261,21 +261,21 @@
 //              If this method is missing, then the send size defaults to LONG_MAX
 //              or about 2 gig.
 ////////////////////////////////////////////////////////////////////////////////
-- (long)requestDataSendSize:(GRRequestUpload *)request
+- (long)requestDataSendSize:(GRUploadRequest *)request
 {
     // user returns the total size of data to send. Used ONLY for percentComplete
     return [_currentUploadData length];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// description:	requestDataAvailable is used as part of the file download.
+// description:	dataAvailable:forRequest: is used as part of the file download.
 //
 // important:   This is required to download data. If this method is missing
 //              and you attempt to download, you will get a runtime error.
 ////////////////////////////////////////////////////////////////////////////////
-- (void)requestDataAvailable:(GRRequestDownload *)request;
+- (void)dataAvailable:(NSData *)data forRequest:(GRDownloadRequest *)request
 {
-    [_currentDownloadData appendData:request.receivedData];
+    [_currentDownloadData appendData:data];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +287,7 @@
 //              If this method is missing, it you will get a runtime error indicating
 //              this method is missing.
 ////////////////////////////////////////////////////////////////////////////////
-- (NSData *)requestDataToSend:(GRRequestUpload *)request
+- (NSData *)requestDataToSend:(GRUploadRequest *)request
 {
     // returns data object or nil when complete
     // basically, first time we return the pointer to the NSData.
@@ -331,11 +331,11 @@
         return;
     }
     
-    if ([self.currentRequest isKindOfClass:[GRRequestDownload class]]) {
+    if ([self.currentRequest isKindOfClass:[GRDownloadRequest class]]) {
         _currentDownloadData = [NSMutableData dataWithCapacity:1];
     }
-    if ([self.currentRequest isKindOfClass:[GRRequestUpload class]]) {
-        NSString *localFilepath = ((GRRequestUpload *)self.currentRequest).localFilepath;
+    if ([self.currentRequest isKindOfClass:[GRUploadRequest class]]) {
+        NSString *localFilepath = ((GRUploadRequest *)self.currentRequest).localFilepath;
         _currentUploadData = [NSData dataWithContentsOfFile:localFilepath];
     }
     

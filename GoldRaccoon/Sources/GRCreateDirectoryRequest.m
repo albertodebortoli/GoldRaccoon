@@ -1,5 +1,5 @@
 //
-//  GRRequestCreateDirectory.m
+//  GRCreateDirectoryRequest.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,13 +12,15 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestCreateDirectory.h"
+#import "GRCreateDirectoryRequest.h"
 
-@interface GRRequestCreateDirectory () <GRRequestDelegate, GRRequestDataSource>
+@interface GRCreateDirectoryRequest () <GRRequestDelegate, GRRequestDataSource>
+
+@property GRListingRequest *listrequest;
 
 @end
 
-@implementation GRRequestCreateDirectory
+@implementation GRCreateDirectoryRequest
 
 @synthesize listrequest;
 
@@ -43,14 +45,14 @@
 {
     if (self.hostname == nil) {
         InfoLog(@"The host name is nil!");
-        self.error = [[GRRequestError alloc] init];
+        self.error = [[GRError alloc] init];
         self.error.errorCode = kGRFTPClientHostnameIsNil;
         [self.delegate requestFailed:self];
         return;
     }
     
     // we first list the directory to see if our folder is up already
-    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
+    self.listrequest = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
     self.listrequest.path = [self.path stringByDeletingLastPathComponent];
     [self.listrequest start];
 }
@@ -66,12 +68,12 @@
 
     if ([self.listrequest fileExists: directoryName]) {
         InfoLog(@"Unfortunately, at this point, the library doesn't support directory overwriting.");
-        [self.streamInfo streamError: self errorCode: kGRFTPClientCantOverwriteDirectory];
+        [self.streamInfo streamError:self errorCode:kGRFTPClientCantOverwriteDirectory];
     }
     else {
         // open the write stream and check for errors calling delegate methods
         // if things fail. This encapsulates the streamInfo object and cleans up our code.
-        [self.streamInfo openWrite: self];
+        [self.streamInfo openWrite:self];
     }
 }
 
@@ -135,14 +137,14 @@
             
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
-            [self.streamInfo streamError: self errorCode: [GRRequestError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
             InfoLog(@"%@", self.error.message);
         }
             break;
             
         case NSStreamEventEndEncountered: {
             // perform callbacks and close out streams
-            [self.streamInfo streamComplete: self];
+            [self.streamInfo streamComplete:self];
         }
             break;
 

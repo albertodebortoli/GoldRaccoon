@@ -1,5 +1,5 @@
 //
-//  GRRequestError.h
+//  GRDeleteRequest.h
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -13,12 +13,8 @@
 //
 
 #import "GRGlobal.h"
+#import "GRRequest.h"
 
-@interface GRRequestError : NSObject
-
-@property (assign) BRErrorCodes errorCode;
-@property (readonly) NSString *message;
-
-+ (BRErrorCodes)errorCodeWithError:(NSError *)error;
+@interface GRDeleteRequest : GRRequest
 
 @end

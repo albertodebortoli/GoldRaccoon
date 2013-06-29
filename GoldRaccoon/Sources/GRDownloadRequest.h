@@ -1,5 +1,5 @@
 //
-//  GRRequestDownload.h
+//  GRDownloadRequest.h
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -15,10 +15,6 @@
 #import "GRGlobal.h"
 #import "GRRequest.h"
 
-@interface GRRequestDownload : GRRequest
-
-@property NSData *receivedData;
-@property (nonatomic, copy) NSString *localFilepath;
-@property (nonatomic, readonly) NSString *fullRemotePath;
+@interface GRDownloadRequest : GRRequest <GRDataExchangeRequestProtocol>
 
 @end

@@ -15,9 +15,9 @@
 #import <Foundation/Foundation.h>
 
 @class GRRequest;
-@class GRRequestDownload;
-@class GRRequestUpload;
-@class GRRequestError;
+@class GRDownloadRequest;
+@class GRUploadRequest;
+@class GRError;
 @class GRStreamInfo;
 
 @protocol GRRequestProtocol <NSObject>
@@ -27,7 +27,7 @@
 
 @property (readonly) NSURL *fullURL;
 @property NSString *path;
-@property (strong) GRRequestError *error;
+@property (strong) GRError *error;
 @property float maximumSize;
 @property float percentCompleted;
 @property long timeout;
@@ -41,6 +41,13 @@
 - (NSURL *)fullURLWithEscape;
 - (void)start;
 - (void)cancelRequest;
+
+@end
+
+@protocol GRDataExchangeRequestProtocol <GRRequestProtocol>
+
+@property (nonatomic, copy) NSString *localFilepath;
+@property (nonatomic, readonly) NSString *fullRemotePath;
 
 @end
 
@@ -63,10 +70,10 @@
 - (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request;
 
 @optional
-- (void)percentCompleted:(GRRequest *) request;
-- (void)requestDataAvailable:(GRRequestDownload *)request;
-- (long)requestDataSendSize:(GRRequestUpload *)request;
-- (NSData *)requestDataToSend:(GRRequestUpload *)request;
+- (void)percentCompleted:(GRRequest *)request;
+- (void)dataAvailable:(NSData *)data forRequest:(GRDownloadRequest *)request;
+- (long)requestDataSendSize:(GRUploadRequest *)request;
+- (NSData *)requestDataToSend:(GRUploadRequest *)request;
 
 @end
 

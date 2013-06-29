@@ -1,5 +1,5 @@
 //
-//  GRRequestUpload.m
+//  GRUploadRequest.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,14 +12,23 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestUpload.h"
+#import "GRUploadRequest.h"
+#import "GRListingRequest.h"
 
-@interface GRRequestUpload () <GRRequestDelegate, GRRequestDataSource>
+@interface GRUploadRequest () <GRRequestDelegate, GRRequestDataSource>
+
+@property (nonatomic, assign) long bytesIndex;
+@property (nonatomic, assign) long bytesRemaining;
+@property (nonatomic, strong) NSData *sentData;
+@property (nonatomic, strong) GRListingRequest *listingRequest;
+
 @end
 
-@implementation GRRequestUpload
+@implementation GRUploadRequest
 
-@synthesize listrequest;
+@synthesize listingRequest;
+@synthesize localFilepath;
+@synthesize fullRemotePath;
 
 /**
  
@@ -27,20 +36,20 @@
 - (void)start
 {
     self.maximumSize = LONG_MAX;
-    bytesIndex = 0;
-    bytesRemaining = 0;
+    _bytesIndex = 0;
+    _bytesRemaining = 0;
     
-    if (![self.delegate respondsToSelector:@selector(requestDataToSend:)]) {
-        [self.streamInfo streamError: self errorCode: kGRFTPClientMissingRequestDataAvailable];
+    if ([self.delegate respondsToSelector:@selector(requestDataToSend:)] == NO) {
+        [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
         InfoLog(@"%@", self.error.message);
         return;
     }
     
     // we first list the directory to see if our folder is up on the server
-    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
-	self.listrequest.passiveMode = self.passiveMode;
-    self.listrequest.path = [self.path stringByDeletingLastPathComponent];
-    [self.listrequest start];
+    self.listingRequest = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
+	self.listingRequest.passiveMode = self.passiveMode;
+    self.listingRequest.path = [self.path stringByDeletingLastPathComponent];
+    [self.listingRequest start];
 }
 
 #pragma mark - GRRequestDelegate
@@ -52,10 +61,10 @@
 {
     NSString * fileName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
     
-    if ([self.listrequest fileExists:fileName]) {
-        if (![self.delegate shouldOverwriteFileWithRequest:self]) {
+    if ([self.listingRequest fileExists:fileName]) {
+        if ([self.delegate shouldOverwriteFileWithRequest:self] == NO) {
             // perform callbacks and close out streams
-            [self.streamInfo streamError: self errorCode: kGRFTPClientFileAlreadyExists];
+            [self.streamInfo streamError:self errorCode:kGRFTPClientFileAlreadyExists];
             return;
         }
     }
@@ -66,7 +75,7 @@
     
     // open the write stream and check for errors calling delegate methods
     // if things fail. This encapsulates the streamInfo object and cleans up our code.
-    [self.streamInfo openWrite: self];
+    [self.streamInfo openWrite:self];
 }
 
 
@@ -127,39 +136,39 @@
         break;
             
         case NSStreamEventHasSpaceAvailable: {
-            if (bytesRemaining == 0) {
-                sentData = [self.delegate requestDataToSend: self];
-                bytesRemaining = [sentData length];
-                bytesIndex = 0;
+            if (_bytesRemaining == 0) {
+                _sentData = [self.delegate requestDataToSend:self];
+                _bytesRemaining = [_sentData length];
+                _bytesIndex = 0;
                 
                 // we are done
-                if (sentData == nil) {
-                    [self.streamInfo streamComplete: self]; // perform callbacks and close out streams
+                if (_sentData == nil) {
+                    [self.streamInfo streamComplete:self]; // perform callbacks and close out streams
                     return;
                 }
             }
             
-            NSUInteger nextPackageLength = MIN(kGRDefaultBufferSize, bytesRemaining);
-            NSRange range = NSMakeRange(bytesIndex, nextPackageLength);
-            NSData *packetToSend = [sentData subdataWithRange: range];
+            NSUInteger nextPackageLength = MIN(kGRDefaultBufferSize, _bytesRemaining);
+            NSRange range = NSMakeRange(_bytesIndex, nextPackageLength);
+            NSData *packetToSend = [_sentData subdataWithRange: range];
 
-            [self.streamInfo write: self data: packetToSend];
+            [self.streamInfo write:self data: packetToSend];
             
-            bytesIndex += self.streamInfo.bytesThisIteration;
-            bytesRemaining -= self.streamInfo.bytesThisIteration;
+            _bytesIndex += self.streamInfo.bytesThisIteration;
+            _bytesRemaining -= self.streamInfo.bytesThisIteration;
         }
         break;
             
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
-            [self.streamInfo streamError: self errorCode: [GRRequestError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
             InfoLog(@"%@", self.error.message);
         }
         break;
             
         case NSStreamEventEndEncountered: {
             // perform callbacks and close out streams
-            [self.streamInfo streamError: self errorCode: kGRFTPServerAbortedTransfer];
+            [self.streamInfo streamError:self errorCode:kGRFTPServerAbortedTransfer];
             InfoLog(@"%@", self.error.message);
         }
         break;

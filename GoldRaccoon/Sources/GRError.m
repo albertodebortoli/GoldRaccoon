@@ -1,5 +1,5 @@
 //
-//  GRRequestError.m
+//  GRError.m
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -12,9 +12,9 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestError.h"
+#import "GRError.h"
 
-@implementation GRRequestError
+@implementation GRError
 
 @synthesize errorCode;
 
@@ -79,7 +79,7 @@
             break;
             
         case kGRFTPClientMissingRequestDataAvailable:
-            errorMessage = @"Delegate missing requestDataAvailable:";
+            errorMessage = @"Delegate missing dataAvailable:forRequest:";
             break;
             
         // Server errors    

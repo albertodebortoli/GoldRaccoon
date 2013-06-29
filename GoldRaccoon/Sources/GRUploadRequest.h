@@ -1,5 +1,5 @@
 //
-//  GRRequestDelete.h
+//  GRUploadRequest.h
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -15,9 +15,6 @@
 #import "GRGlobal.h"
 #import "GRRequest.h"
 
-@interface GRRequestDelete : GRRequest
-{
-    BOOL isDirectory;
-}
+@interface GRUploadRequest : GRRequest <GRDataExchangeRequestProtocol>
 
 @end

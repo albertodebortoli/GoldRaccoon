@@ -47,7 +47,7 @@ dispatch_queue_t dispatch_get_local_queue()
 {
     if ([request.dataSource hostname] == nil) {
         InfoLog(@"The host name is nil!");
-        request.error = [[GRRequestError alloc] init];
+        request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
         [request.streamInfo close: request];
@@ -58,7 +58,7 @@ dispatch_queue_t dispatch_get_local_queue()
     CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, ( __bridge CFURLRef) request.fullURL);
     
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue : kCFBooleanFalse);
+	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue :kCFBooleanFalse);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
@@ -67,7 +67,7 @@ dispatch_queue_t dispatch_get_local_queue()
     if (readStream==nil)
     {
         InfoLog(@"Can't open the read stream! Possibly wrong URL");
-        request.error = [[GRRequestError alloc] init];
+        request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
         [request.streamInfo close: request];
@@ -83,7 +83,7 @@ dispatch_queue_t dispatch_get_local_queue()
         if (!request.didOpenStream && request.error == nil)
         {
             InfoLog(@"No response from the server. Timeout.");
-            request.error = [[GRRequestError alloc] init];
+            request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed: request];
             [request.streamInfo close: request];
@@ -98,7 +98,7 @@ dispatch_queue_t dispatch_get_local_queue()
 {
     if ([request.dataSource hostname] == nil) {
         InfoLog(@"The host name is nil!");
-        request.error = [[GRRequestError alloc] init];
+        request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
         [request.streamInfo close: request];
@@ -108,7 +108,7 @@ dispatch_queue_t dispatch_get_local_queue()
     CFWriteStreamRef writeStreamRef = CFWriteStreamCreateWithFTPURL(NULL, ( __bridge CFURLRef) request.fullURL);
     
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-	CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue : kCFBooleanFalse);
+	CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue :kCFBooleanFalse);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
@@ -118,7 +118,7 @@ dispatch_queue_t dispatch_get_local_queue()
     if (writeStream == nil)
     {
         InfoLog(@"Can't open the write stream! Possibly wrong URL!");
-        request.error = [[GRRequestError alloc] init];
+        request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
         [request.streamInfo close: request];
@@ -134,7 +134,7 @@ dispatch_queue_t dispatch_get_local_queue()
         if (!request.didOpenStream && request.error==nil)
         {
             InfoLog(@"No response from the server. Timeout.");
-            request.error = [[GRRequestError alloc] init];
+            request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed:request];
             [request.streamInfo close: request];
@@ -171,7 +171,7 @@ dispatch_queue_t dispatch_get_local_queue()
 - (NSData *)read:(GRRequest *)request
 {
     NSData *data;
-    NSMutableData *bufferObject = [NSMutableData dataWithLength: kGRDefaultBufferSize];
+    NSMutableData *bufferObject = [NSMutableData dataWithLength:kGRDefaultBufferSize];
 
     bytesThisIteration = [readStream read: (UInt8 *) [bufferObject bytes] maxLength:kGRDefaultBufferSize];
     bytesTotal += bytesThisIteration;
@@ -193,7 +193,7 @@ dispatch_queue_t dispatch_get_local_queue()
         return [NSData data]; // returns empty data object - means no error, but no data
     }
     // otherwise we had an error, return an error
-    [self streamError: request errorCode: kGRFTPClientCantReadStream];
+    [self streamError: request errorCode:kGRFTPClientCantReadStream];
     InfoLog(@"%@", request.error.message);
     
     return nil;
@@ -220,7 +220,7 @@ dispatch_queue_t dispatch_get_local_queue()
         return YES;
     }
     
-    [self streamError: request errorCode: kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
+    [self streamError: request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
     InfoLog(@"%@", request.error.message);
 
     return NO;
@@ -231,7 +231,7 @@ dispatch_queue_t dispatch_get_local_queue()
  */
 - (void)streamError:(GRRequest *)request errorCode:(enum BRErrorCodes)errorCode
 {
-    request.error = [[GRRequestError alloc] init];
+    request.error = [[GRError alloc] init];
     request.error.errorCode = errorCode;
     [request.delegate requestFailed: request];
     [request.streamInfo close: request];

@@ -1,5 +1,5 @@
 //
-//  GRRequestUpload.h
+//  GRListingRequest.h
 //  GoldRaccoon
 //
 //  Created by Valentin Radu on 8/23/11.
@@ -14,17 +14,11 @@
 
 #import "GRGlobal.h"
 #import "GRRequest.h"
-#import "GRRequestListDirectory.h"
 
-@interface GRRequestUpload : GRRequest
-{
-    long bytesIndex;
-    long bytesRemaining;
-    NSData *sentData;
-}
+@interface GRListingRequest : GRRequest
 
-@property GRRequestListDirectory *listrequest;
-@property (nonatomic, copy) NSString *localFilepath;
-@property (nonatomic, readonly) NSString *fullRemotePath;
+@property NSArray *filesInfo;
+
+- (BOOL)fileExists:(NSString *)fileNamePath;
 
 @end
