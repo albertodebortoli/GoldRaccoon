@@ -35,7 +35,7 @@ dispatch_queue_t dispatch_get_local_queue()
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _queue = dispatch_queue_create("com.github.goldraccoon", 0);
-        dispatch_queue_set_specific(_queue, "com.github.goldraccoon", (void*) "com.github.goldraccoon", NULL);
+        dispatch_queue_set_specific(_queue, "com.github.goldraccoon", (void *) "com.github.goldraccoon", NULL);
     });
     return _queue;
 }
@@ -45,8 +45,8 @@ dispatch_queue_t dispatch_get_local_queue()
  */
 - (void)openRead:(GRRequest *)request
 {
-    if ([request.dataSource hostname] == nil) {
-        InfoLog(@"The host name is nil!");
+    if ([request.dataSource hostnameForRequest:request] == nil) {
+        NSLog(@"The host name is nil!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
@@ -60,13 +60,13 @@ dispatch_queue_t dispatch_get_local_queue()
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue :kCFBooleanFalse);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
-    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
-    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
+    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource usernameForRequest:request]);
+    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource passwordForRequest:request]);
     readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
     
     if (readStream==nil)
     {
-        InfoLog(@"Can't open the read stream! Possibly wrong URL");
+        NSLog(@"Can't open the read stream! Possibly wrong URL");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
@@ -82,7 +82,7 @@ dispatch_queue_t dispatch_get_local_queue()
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
         if (!request.didOpenStream && request.error == nil)
         {
-            InfoLog(@"No response from the server. Timeout.");
+            NSLog(@"No response from the server. Timeout.");
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed: request];
@@ -96,8 +96,8 @@ dispatch_queue_t dispatch_get_local_queue()
  */
 - (void)openWrite:(GRRequest *)request
 {
-    if ([request.dataSource hostname] == nil) {
-        InfoLog(@"The host name is nil!");
+    if ([request.dataSource hostnameForRequest:request] == nil) {
+        NSLog(@"The host name is nil!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
@@ -110,14 +110,13 @@ dispatch_queue_t dispatch_get_local_queue()
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 	CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue :kCFBooleanFalse);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
-    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
-    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
+    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource usernameForRequest:request]);
+    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource passwordForRequest:request]);
     
     writeStream = ( __bridge_transfer NSOutputStream *) writeStreamRef;
     
-    if (writeStream == nil)
-    {
-        InfoLog(@"Can't open the write stream! Possibly wrong URL!");
+    if (writeStream == nil) {
+        NSLog(@"Can't open the write stream! Possibly wrong URL!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
@@ -131,9 +130,8 @@ dispatch_queue_t dispatch_get_local_queue()
     
     request.didOpenStream = NO;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
-        if (!request.didOpenStream && request.error==nil)
-        {
-            InfoLog(@"No response from the server. Timeout.");
+        if (!request.didOpenStream && request.error==nil) {
+            NSLog(@"No response from the server. Timeout.");
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed:request];
@@ -181,8 +179,8 @@ dispatch_queue_t dispatch_get_local_queue()
         data = [NSData dataWithBytes: (UInt8 *) [bufferObject bytes] length: bytesThisIteration];
         request.percentCompleted = bytesTotal / request.maximumSize;
         
-        if ([request.delegate respondsToSelector:@selector(percentCompleted:)]) {
-            [request.delegate percentCompleted: request];
+        if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
+            [request.delegate percentCompleted:request.percentCompleted forRequest:request];
         }
         
         return data;
@@ -194,7 +192,7 @@ dispatch_queue_t dispatch_get_local_queue()
     }
     // otherwise we had an error, return an error
     [self streamError: request errorCode:kGRFTPClientCantReadStream];
-    InfoLog(@"%@", request.error.message);
+    NSLog(@"%@", request.error.message);
     
     return nil;
 }
@@ -209,8 +207,8 @@ dispatch_queue_t dispatch_get_local_queue()
             
     if (bytesThisIteration > 0) {
         request.percentCompleted = bytesTotal / request.maximumSize;
-        if ([request.delegate respondsToSelector:@selector(percentCompleted:)]) {
-            [request.delegate percentCompleted: request];
+        if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
+            [request.delegate percentCompleted:request.percentCompleted forRequest:request];
         }
         
         return YES;
@@ -221,7 +219,7 @@ dispatch_queue_t dispatch_get_local_queue()
     }
     
     [self streamError: request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
-    InfoLog(@"%@", request.error.message);
+    NSLog(@"%@", request.error.message);
 
     return NO;
 }

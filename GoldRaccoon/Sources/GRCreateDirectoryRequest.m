@@ -13,6 +13,7 @@
 //
 
 #import "GRCreateDirectoryRequest.h"
+#import "GRListingRequest.h"
 
 @interface GRCreateDirectoryRequest () <GRRequestDelegate, GRRequestDataSource>
 
@@ -43,8 +44,8 @@
  */
 - (void)start
 {
-    if (self.hostname == nil) {
-        InfoLog(@"The host name is nil!");
+    if ([self hostnameForRequest:self] == nil) {
+        NSLog(@"The host name is nil!");
         self.error = [[GRError alloc] init];
         self.error.errorCode = kGRFTPClientHostnameIsNil;
         [self.delegate requestFailed:self];
@@ -66,8 +67,8 @@
 {
     NSString *directoryName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
 
-    if ([self.listrequest fileExists: directoryName]) {
-        InfoLog(@"Unfortunately, at this point, the library doesn't support directory overwriting.");
+    if ([self.listrequest fileExists:directoryName]) {
+        NSLog(@"Unfortunately, at this point, the library doesn't support directory overwriting.");
         [self.streamInfo streamError:self errorCode:kGRFTPClientCantOverwriteDirectory];
     }
     else {
@@ -88,26 +89,26 @@
 /**
  
  */
-- (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request
+- (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     return NO;
 }
 
 #pragma mark - GRRequestDataSource
 
-- (NSString *)hostname
+- (NSString *)hostnameForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource hostname];
+    return [self.dataSource hostnameForRequest:request];
 }
 
-- (NSString *)username
+- (NSString *)usernameForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource username];
+    return [self.dataSource usernameForRequest:request];
 }
 
-- (NSString *)password
+- (NSString *)passwordForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource password];
+    return [self.dataSource passwordForRequest:request];
 }
 
 #pragma mark - NSStreamDelegate
@@ -138,7 +139,7 @@
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
-            InfoLog(@"%@", self.error.message);
+            NSLog(@"%@", self.error.message);
         }
             break;
             

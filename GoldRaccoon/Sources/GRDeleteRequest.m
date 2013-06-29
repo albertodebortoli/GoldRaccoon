@@ -43,7 +43,7 @@
 {
     SInt32 errorcode;
     
-    if ([self.dataSource hostname] == nil) {
+    if ([self.dataSource hostnameForRequest:self] == nil) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientHostnameIsNil];
         return;
     }

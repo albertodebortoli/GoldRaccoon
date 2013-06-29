@@ -66,7 +66,6 @@
 		D3622E17177F3357009DEEEB /* GoldRaccoonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoldRaccoonTests.h; sourceTree = "<group>"; };
 		D3622E18177F3357009DEEEB /* GoldRaccoonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoldRaccoonTests.m; sourceTree = "<group>"; };
 		D3622E23177F3854009DEEEB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		D3622E26177F3AA7009DEEEB /* GRGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRGlobal.h; sourceTree = "<group>"; };
 		D3622E27177F3AA7009DEEEB /* GRRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequest.h; sourceTree = "<group>"; };
 		D3622E28177F3AA7009DEEEB /* GRRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequest.m; sourceTree = "<group>"; };
 		D3622E29177F3AA7009DEEEB /* GRCreateDirectoryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCreateDirectoryRequest.h; sourceTree = "<group>"; };
@@ -201,14 +200,8 @@
 				D3622E4D177F6752009DEEEB /* GRRequestsManagerProtocol.h */,
 				D3622E4A177F6727009DEEEB /* GRRequestsManager.h */,
 				D3622E4B177F6727009DEEEB /* GRRequestsManager.m */,
-				D3622E47177F64B3009DEEEB /* GRQueue.h */,
-				D3622E48177F64B3009DEEEB /* GRQueue.m */,
-				D3622E26177F3AA7009DEEEB /* GRGlobal.h */,
 				D3622E4F177F8498009DEEEB /* Requests */,
-				D3622E2F177F3AA7009DEEEB /* GRError.h */,
-				D3622E30177F3AA7009DEEEB /* GRError.m */,
-				D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */,
-				D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */,
+				D3622E50177F94E3009DEEEB /* Utils */,
 			);
 			name = Sources;
 			path = GoldRaccoon/Sources;
@@ -232,6 +225,19 @@
 				D3622E36177F3AA7009DEEEB /* GRUploadRequest.m */,
 			);
 			name = Requests;
+			sourceTree = "<group>";
+		};
+		D3622E50177F94E3009DEEEB /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D3622E47177F64B3009DEEEB /* GRQueue.h */,
+				D3622E48177F64B3009DEEEB /* GRQueue.m */,
+				D3622E2F177F3AA7009DEEEB /* GRError.h */,
+				D3622E30177F3AA7009DEEEB /* GRError.m */,
+				D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */,
+				D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

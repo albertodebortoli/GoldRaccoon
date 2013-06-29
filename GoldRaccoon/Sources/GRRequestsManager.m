@@ -119,7 +119,7 @@
 
 #pragma mark - FTP Actions
 
-- (GRCreateDirectoryRequest *)addRequestForCreateDirectoryAtPath:(NSString *)path
+- (id<GRRequestProtocol>)addRequestForCreateDirectoryAtPath:(NSString *)path
 {
     GRCreateDirectoryRequest *request = [[GRCreateDirectoryRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
@@ -128,7 +128,7 @@
     return request;
 }
 
-- (GRDeleteRequest *)addRequestForDeleteDirectoryAtPath:(NSString *)path
+- (id<GRRequestProtocol>)addRequestForDeleteDirectoryAtPath:(NSString *)path
 {
     GRDeleteRequest *request = [[GRDeleteRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
@@ -137,7 +137,7 @@
     return request;
 }
 
-- (GRListingRequest *)addRequestForListDirectoryAtPath:(NSString *)path
+- (id<GRRequestProtocol>)addRequestForListDirectoryAtPath:(NSString *)path
 {
     GRListingRequest *request = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
     request.path = path;
@@ -146,7 +146,7 @@
     return request;
 }
 
-- (GRDownloadRequest *)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
+- (id<GRDataExchangeRequestProtocol>)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
 {
     GRDownloadRequest *request = [[GRDownloadRequest alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
@@ -156,7 +156,7 @@
     return request;
 }
 
-- (GRUploadRequest *)addRequestForUploadFileAtLocalPath:(NSString *)localPath toRemotePath:(NSString *)remotePath
+- (id<GRDataExchangeRequestProtocol>)addRequestForUploadFileAtLocalPath:(NSString *)localPath toRemotePath:(NSString *)remotePath
 {
     GRUploadRequest *request = [[GRUploadRequest alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
@@ -166,7 +166,7 @@
     return request;
 }
 
-- (GRDeleteRequest *)addRequestForDeleteFileAtPath:(NSString *)filepath
+- (id<GRRequestProtocol>)addRequestForDeleteFileAtPath:(NSString *)filepath
 {
     GRDeleteRequest *request = [[GRDeleteRequest alloc] initWithDelegate:self datasource:self];
     request.path = filepath;
@@ -235,23 +235,47 @@
     [self _processNextRequest];
 }
 
-- (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request
+#pragma mark - GRRequestDelegate optional
+
+- (void)percentCompleted:(float)percent forRequest:(id<GRRequestProtocol>)request
+{
+    if (_delegateRespondsToPercentProgress) {
+        [self.delegate requestsManager:self didCompletePercent:percent forRequest:request];
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// description:	dataAvailable:forRequest: is used as part of the file download.
+//
+// important:   This is required to download data. If this method is missing
+//              and you attempt to download, you will get a runtime error.
+////////////////////////////////////////////////////////////////////////////////
+- (void)dataAvailable:(NSData *)data forRequest:(id<GRDataExchangeRequestProtocol>)request
+{
+    [_currentDownloadData appendData:data];
+}
+
+- (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     // called only with GRUploadRequest requests
     return YES;
 }
 
-#pragma mark - GRRequestDelegate optional
+#pragma mark - GRRequestDataSource
 
-- (void)percentCompleted:(GRRequest *)request
+- (NSString *)hostnameForRequest:(id<GRRequestProtocol>)request
 {
-    if (_delegateRespondsToPercentProgress) {
-        [self.delegate requestsManager:self didCompletePercent:request.percentCompleted forRequest:request];
-    }
-    
-    //NSLog(@"%f completed...", request.percentCompleted);
-    //NSLog(@"%ld bytes this iteration", request.bytesSent);
-    //NSLog(@"%ld total bytes", request.totalBytesSent);
+    return self.hostname;
+}
+
+- (NSString *)usernameForRequest:(id<GRRequestProtocol>)request
+{
+    return self.username;
+}
+
+- (NSString *)passwordForRequest:(id<GRRequestProtocol>)request
+{
+    return self.password;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,21 +285,10 @@
 //              If this method is missing, then the send size defaults to LONG_MAX
 //              or about 2 gig.
 ////////////////////////////////////////////////////////////////////////////////
-- (long)requestDataSendSize:(GRUploadRequest *)request
+- (long)requestDataSendSize:(id<GRDataExchangeRequestProtocol>)request
 {
     // user returns the total size of data to send. Used ONLY for percentComplete
     return [_currentUploadData length];
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// description:	dataAvailable:forRequest: is used as part of the file download.
-//
-// important:   This is required to download data. If this method is missing
-//              and you attempt to download, you will get a runtime error.
-////////////////////////////////////////////////////////////////////////////////
-- (void)dataAvailable:(NSData *)data forRequest:(GRDownloadRequest *)request
-{
-    [_currentDownloadData appendData:data];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +300,7 @@
 //              If this method is missing, it you will get a runtime error indicating
 //              this method is missing.
 ////////////////////////////////////////////////////////////////////////////////
-- (NSData *)requestDataToSend:(GRUploadRequest *)request
+- (NSData *)requestDataToSend:(id<GRDataExchangeRequestProtocol>)request
 {
     // returns data object or nil when complete
     // basically, first time we return the pointer to the NSData.
@@ -296,23 +309,6 @@
     NSData *temp = _currentUploadData;       // this is a shallow copy of the pointer, not a deep copy
     _currentUploadData = nil;                // next time around, return nil...
     return temp;
-}
-
-#pragma mark - GRRequestDataSource
-
-- (NSString *)hostname
-{
-    return self.hostname;
-}
-
-- (NSString *)username
-{
-    return self.username;
-}
-
-- (NSString *)password
-{
-    return self.password;
 }
 
 #pragma mark - Private Methods

@@ -33,7 +33,7 @@
 {
     if ([self.delegate respondsToSelector:@selector(dataAvailable:forRequest:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
-        InfoLog(@"%@", self.error.message);
+        NSLog(@"%@", self.error.message);
         return;
     }
     
@@ -67,7 +67,7 @@
                 [self.delegate dataAvailable:self.receivedData forRequest:self];
             }
             else {
-                InfoLog(@"Stream opened, but failed while trying to read from it.");
+                NSLog(@"Stream opened, but failed while trying to read from it.");
                 [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         } 
@@ -80,7 +80,7 @@
             
         case NSStreamEventErrorOccurred: {
             [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
-            InfoLog(@"%@", self.error.message);
+            NSLog(@"%@", self.error.message);
         }
         break;
             
@@ -99,7 +99,7 @@
  */
 - (NSString *)fullRemotePath
 {
-    return [[self.dataSource hostname] stringByAppendingPathComponent:self.path];
+    return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];
 }
 
 @end

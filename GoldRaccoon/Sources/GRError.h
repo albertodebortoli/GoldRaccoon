@@ -12,8 +12,6 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRGlobal.h"
-
 typedef enum BRErrorCodes {
     //client errors
     kGRFTPClientHostnameIsNil = 901,

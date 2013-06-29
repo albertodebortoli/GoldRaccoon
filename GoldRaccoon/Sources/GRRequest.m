@@ -59,7 +59,7 @@
  */
 - (NSURL *)fullURL
 {
-    NSString *fullURLString = [NSString stringWithFormat: @"ftp://%@%@", [self.dataSource hostname], self.path];
+    NSString *fullURLString = [NSString stringWithFormat: @"ftp://%@%@", [self.dataSource hostnameForRequest:self], self.path];
     
     return [NSURL URLWithString:fullURLString];
 }
@@ -69,8 +69,8 @@
  */
 - (NSURL *)fullURLWithEscape
 {
-    NSString *escapedUsername = [self encodeString:[self.dataSource username]];
-    NSString *escapedPassword = [self encodeString:[self.dataSource password]];
+    NSString *escapedUsername = [self encodeString:[self.dataSource usernameForRequest:self]];
+    NSString *escapedPassword = [self encodeString:[self.dataSource passwordForRequest:self]];
     NSString *cred;
     
     if (escapedUsername != nil) {
@@ -86,7 +86,7 @@
     }
     cred = [cred stringByStandardizingPath];
     
-    NSString * fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, [self.dataSource hostname], self.path];
+    NSString *fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, [self.dataSource hostnameForRequest:self], self.path];
     return [NSURL URLWithString:fullURLString];
 }
 

@@ -39,9 +39,9 @@
     _bytesIndex = 0;
     _bytesRemaining = 0;
     
-    if ([self.delegate respondsToSelector:@selector(requestDataToSend:)] == NO) {
+    if ([self.dataSource respondsToSelector:@selector(requestDataToSend:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
-        InfoLog(@"%@", self.error.message);
+        NSLog(@"%@", self.error.message);
         return;
     }
     
@@ -62,15 +62,15 @@
     NSString * fileName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
     
     if ([self.listingRequest fileExists:fileName]) {
-        if ([self.delegate shouldOverwriteFileWithRequest:self] == NO) {
+        if ([self.delegate shouldOverwriteFile:self.path forRequest:self] == NO) {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:kGRFTPClientFileAlreadyExists];
             return;
         }
     }
     
-    if ([self.delegate respondsToSelector:@selector(requestDataSendSize:)]) {
-        self.maximumSize = [self.delegate requestDataSendSize:self];
+    if ([self.dataSource respondsToSelector:@selector(requestDataSendSize:)]) {
+        self.maximumSize = [self.dataSource requestDataSendSize:self];
     }
     
     // open the write stream and check for errors calling delegate methods
@@ -90,26 +90,26 @@
 /**
  
  */
-- (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request
+- (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
-    return [self.delegate shouldOverwriteFileWithRequest:request];
+    return [self.delegate shouldOverwriteFile:filePath forRequest:request];
 }
 
 #pragma mark - GRRequestDataSource
 
-- (NSString *)hostname
+- (NSString *)hostnameForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource hostname];
+    return [self.dataSource hostnameForRequest:request];
 }
 
-- (NSString *)username
+- (NSString *)usernameForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource username];
+    return [self.dataSource usernameForRequest:request];
 }
 
-- (NSString *)password
+- (NSString *)passwordForRequest:(id<GRRequestProtocol>)request
 {
-    return [self.dataSource password];
+    return [self.dataSource passwordForRequest:request];
 }
 
 #pragma mark - NSStreamDelegate
@@ -137,7 +137,7 @@
             
         case NSStreamEventHasSpaceAvailable: {
             if (_bytesRemaining == 0) {
-                _sentData = [self.delegate requestDataToSend:self];
+                _sentData = [self.dataSource requestDataToSend:self];
                 _bytesRemaining = [_sentData length];
                 _bytesIndex = 0;
                 
@@ -162,14 +162,14 @@
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
-            InfoLog(@"%@", self.error.message);
+            NSLog(@"%@", self.error.message);
         }
         break;
             
         case NSStreamEventEndEncountered: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:kGRFTPServerAbortedTransfer];
-            InfoLog(@"%@", self.error.message);
+            NSLog(@"%@", self.error.message);
         }
         break;
         
@@ -183,7 +183,7 @@
  */
 - (NSString *)fullRemotePath
 {
-    return [self.hostname stringByAppendingPathComponent:self.path];
+    return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];
 }
 
 @end

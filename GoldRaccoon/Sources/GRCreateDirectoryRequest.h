@@ -12,8 +12,7 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRGlobal.h"
-#import "GRListingRequest.h"
+#import "GRRequest.h"
 
 @interface GRCreateDirectoryRequest : GRRequest
 

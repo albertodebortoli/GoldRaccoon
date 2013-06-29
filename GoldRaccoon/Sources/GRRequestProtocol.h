@@ -15,8 +15,6 @@
 #import <Foundation/Foundation.h>
 
 @class GRRequest;
-@class GRDownloadRequest;
-@class GRUploadRequest;
 @class GRError;
 @class GRStreamInfo;
 
@@ -54,34 +52,25 @@
 @protocol GRRequestDelegate <NSObject>
 
 @required
-/**
- @param request The request object
- */
-- (void)requestCompleted:(GRRequest *)request;
-
-/**
- @param request The request object
- */
-- (void)requestFailed:(GRRequest *)request;
-
-/**
- @param request The request object
- */
-- (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request;
+- (void)requestCompleted:(id<GRRequestProtocol>)request;
+- (void)requestFailed:(id<GRRequestProtocol>)request;
 
 @optional
-- (void)percentCompleted:(GRRequest *)request;
-- (void)dataAvailable:(NSData *)data forRequest:(GRDownloadRequest *)request;
-- (long)requestDataSendSize:(GRUploadRequest *)request;
-- (NSData *)requestDataToSend:(GRUploadRequest *)request;
+- (void)percentCompleted:(float)percent forRequest:(id<GRRequestProtocol>)request;
+- (void)dataAvailable:(NSData *)data forRequest:(id<GRDataExchangeRequestProtocol>)request;
+- (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request;
 
 @end
 
 @protocol GRRequestDataSource <NSObject>
 
 @required
-- (NSString *)hostname;
-- (NSString *)username;
-- (NSString *)password;
+- (NSString *)hostnameForRequest:(id<GRRequestProtocol>)request;
+- (NSString *)usernameForRequest:(id<GRRequestProtocol>)request;
+- (NSString *)passwordForRequest:(id<GRRequestProtocol>)request;
+
+@optional
+- (long)requestDataSendSize:(id<GRDataExchangeRequestProtocol>)request;
+- (NSData *)requestDataToSend:(id<GRDataExchangeRequestProtocol>)request;
 
 @end

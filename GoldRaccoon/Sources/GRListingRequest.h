@@ -12,7 +12,6 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRGlobal.h"
 #import "GRRequest.h"
 
 @interface GRListingRequest : GRRequest
