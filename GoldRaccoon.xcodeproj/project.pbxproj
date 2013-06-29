@@ -21,6 +21,17 @@
 		D3622E0E177F3357009DEEEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622DEF177F3357009DEEEB /* Foundation.framework */; };
 		D3622E16177F3357009DEEEB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3622E14177F3357009DEEEB /* InfoPlist.strings */; };
 		D3622E19177F3357009DEEEB /* GoldRaccoonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E18177F3357009DEEEB /* GoldRaccoonTests.m */; };
+		D3622E39177F3AA7009DEEEB /* GRRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E28177F3AA7009DEEEB /* GRRequest.m */; };
+		D3622E3A177F3AA7009DEEEB /* GRRequestCreateDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E2A177F3AA7009DEEEB /* GRRequestCreateDirectory.m */; };
+		D3622E3B177F3AA7009DEEEB /* GRRequestDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E2C177F3AA7009DEEEB /* GRRequestDelete.m */; };
+		D3622E3C177F3AA7009DEEEB /* GRRequestDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E2E177F3AA7009DEEEB /* GRRequestDownload.m */; };
+		D3622E3D177F3AA7009DEEEB /* GRRequestError.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E30177F3AA7009DEEEB /* GRRequestError.m */; };
+		D3622E3E177F3AA7009DEEEB /* GRRequestListDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */; };
+		D3622E3F177F3AA7009DEEEB /* GRRequestQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */; };
+		D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */; };
+		D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */; };
+		D3622E43177F3B6A009DEEEB /* LICENSE.markdown in Resources */ = {isa = PBXBuildFile; fileRef = D3622E42177F3B6A009DEEEB /* LICENSE.markdown */; };
+		D3622E45177F3C55009DEEEB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622E44177F3C55009DEEEB /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +65,27 @@
 		D3622E17177F3357009DEEEB /* GoldRaccoonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoldRaccoonTests.h; sourceTree = "<group>"; };
 		D3622E18177F3357009DEEEB /* GoldRaccoonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoldRaccoonTests.m; sourceTree = "<group>"; };
 		D3622E23177F3854009DEEEB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		D3622E26177F3AA7009DEEEB /* GRGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRGlobal.h; sourceTree = "<group>"; };
+		D3622E27177F3AA7009DEEEB /* GRRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequest.h; sourceTree = "<group>"; };
+		D3622E28177F3AA7009DEEEB /* GRRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequest.m; sourceTree = "<group>"; };
+		D3622E29177F3AA7009DEEEB /* GRRequestCreateDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestCreateDirectory.h; sourceTree = "<group>"; };
+		D3622E2A177F3AA7009DEEEB /* GRRequestCreateDirectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestCreateDirectory.m; sourceTree = "<group>"; };
+		D3622E2B177F3AA7009DEEEB /* GRRequestDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestDelete.h; sourceTree = "<group>"; };
+		D3622E2C177F3AA7009DEEEB /* GRRequestDelete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestDelete.m; sourceTree = "<group>"; };
+		D3622E2D177F3AA7009DEEEB /* GRRequestDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestDownload.h; sourceTree = "<group>"; };
+		D3622E2E177F3AA7009DEEEB /* GRRequestDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestDownload.m; sourceTree = "<group>"; };
+		D3622E2F177F3AA7009DEEEB /* GRRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestError.h; sourceTree = "<group>"; };
+		D3622E30177F3AA7009DEEEB /* GRRequestError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestError.m; sourceTree = "<group>"; };
+		D3622E31177F3AA7009DEEEB /* GRRequestListDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestListDirectory.h; sourceTree = "<group>"; };
+		D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestListDirectory.m; sourceTree = "<group>"; };
+		D3622E33177F3AA7009DEEEB /* GRRequestQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestQueue.h; sourceTree = "<group>"; };
+		D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestQueue.m; sourceTree = "<group>"; };
+		D3622E35177F3AA7009DEEEB /* GRRequestUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestUpload.h; sourceTree = "<group>"; };
+		D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRRequestUpload.m; sourceTree = "<group>"; };
+		D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRStreamInfo.h; sourceTree = "<group>"; };
+		D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRStreamInfo.m; sourceTree = "<group>"; };
+		D3622E42177F3B6A009DEEEB /* LICENSE.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.markdown; sourceTree = "<group>"; };
+		D3622E44177F3C55009DEEEB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3622E45177F3C55009DEEEB /* CFNetwork.framework in Frameworks */,
 				D3622DEE177F3357009DEEEB /* UIKit.framework in Frameworks */,
 				D3622DF0177F3357009DEEEB /* Foundation.framework in Frameworks */,
 				D3622DF2177F3357009DEEEB /* CoreGraphics.framework in Frameworks */,
@@ -83,7 +116,9 @@
 		D3622DE1177F3357009DEEEB = {
 			isa = PBXGroup;
 			children = (
+				D3622E25177F3AA7009DEEEB /* Sources */,
 				D3622E23177F3854009DEEEB /* README.md */,
+				D3622E42177F3B6A009DEEEB /* LICENSE.markdown */,
 				D3622DF3177F3357009DEEEB /* GoldRaccoon */,
 				D3622E11177F3357009DEEEB /* GoldRaccoonTests */,
 				D3622DEC177F3357009DEEEB /* Frameworks */,
@@ -103,6 +138,7 @@
 		D3622DEC177F3357009DEEEB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3622E44177F3C55009DEEEB /* CFNetwork.framework */,
 				D3622DED177F3357009DEEEB /* UIKit.framework */,
 				D3622DEF177F3357009DEEEB /* Foundation.framework */,
 				D3622DF1177F3357009DEEEB /* CoreGraphics.framework */,
@@ -152,6 +188,33 @@
 				D3622E14177F3357009DEEEB /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D3622E25177F3AA7009DEEEB /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D3622E26177F3AA7009DEEEB /* GRGlobal.h */,
+				D3622E27177F3AA7009DEEEB /* GRRequest.h */,
+				D3622E28177F3AA7009DEEEB /* GRRequest.m */,
+				D3622E29177F3AA7009DEEEB /* GRRequestCreateDirectory.h */,
+				D3622E2A177F3AA7009DEEEB /* GRRequestCreateDirectory.m */,
+				D3622E2B177F3AA7009DEEEB /* GRRequestDelete.h */,
+				D3622E2C177F3AA7009DEEEB /* GRRequestDelete.m */,
+				D3622E2D177F3AA7009DEEEB /* GRRequestDownload.h */,
+				D3622E2E177F3AA7009DEEEB /* GRRequestDownload.m */,
+				D3622E2F177F3AA7009DEEEB /* GRRequestError.h */,
+				D3622E30177F3AA7009DEEEB /* GRRequestError.m */,
+				D3622E31177F3AA7009DEEEB /* GRRequestListDirectory.h */,
+				D3622E32177F3AA7009DEEEB /* GRRequestListDirectory.m */,
+				D3622E33177F3AA7009DEEEB /* GRRequestQueue.h */,
+				D3622E34177F3AA7009DEEEB /* GRRequestQueue.m */,
+				D3622E35177F3AA7009DEEEB /* GRRequestUpload.h */,
+				D3622E36177F3AA7009DEEEB /* GRRequestUpload.m */,
+				D3622E37177F3AA7009DEEEB /* GRStreamInfo.h */,
+				D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */,
+			);
+			name = Sources;
+			path = GoldRaccoon/Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,6 +293,7 @@
 				D3622E00177F3357009DEEEB /* Default.png in Resources */,
 				D3622E02177F3357009DEEEB /* Default@2x.png in Resources */,
 				D3622E04177F3357009DEEEB /* Default-568h@2x.png in Resources */,
+				D3622E43177F3B6A009DEEEB /* LICENSE.markdown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +330,15 @@
 			files = (
 				D3622DFA177F3357009DEEEB /* main.m in Sources */,
 				D3622DFE177F3357009DEEEB /* GRAppDelegate.m in Sources */,
+				D3622E39177F3AA7009DEEEB /* GRRequest.m in Sources */,
+				D3622E3A177F3AA7009DEEEB /* GRRequestCreateDirectory.m in Sources */,
+				D3622E3B177F3AA7009DEEEB /* GRRequestDelete.m in Sources */,
+				D3622E3C177F3AA7009DEEEB /* GRRequestDownload.m in Sources */,
+				D3622E3D177F3AA7009DEEEB /* GRRequestError.m in Sources */,
+				D3622E3E177F3AA7009DEEEB /* GRRequestListDirectory.m in Sources */,
+				D3622E3F177F3AA7009DEEEB /* GRRequestQueue.m in Sources */,
+				D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */,
+				D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
