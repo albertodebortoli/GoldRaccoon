@@ -31,6 +31,7 @@
 		D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E38177F3AA7009DEEEB /* GRStreamInfo.m */; };
 		D3622E43177F3B6A009DEEEB /* LICENSE.markdown in Resources */ = {isa = PBXBuildFile; fileRef = D3622E42177F3B6A009DEEEB /* LICENSE.markdown */; };
 		D3622E45177F3C55009DEEEB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622E44177F3C55009DEEEB /* CFNetwork.framework */; };
+		D3622E49177F64B4009DEEEB /* GRQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D3622E48177F64B3009DEEEB /* GRQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,8 @@
 		D3622E42177F3B6A009DEEEB /* LICENSE.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.markdown; sourceTree = "<group>"; };
 		D3622E44177F3C55009DEEEB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		D3622E46177F4F89009DEEEB /* GRRequestProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRRequestProtocol.h; sourceTree = "<group>"; };
+		D3622E47177F64B3009DEEEB /* GRQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRQueue.h; sourceTree = "<group>"; };
+		D3622E48177F64B3009DEEEB /* GRQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +194,8 @@
 		D3622E25177F3AA7009DEEEB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D3622E47177F64B3009DEEEB /* GRQueue.h */,
+				D3622E48177F64B3009DEEEB /* GRQueue.m */,
 				D3622E26177F3AA7009DEEEB /* GRGlobal.h */,
 				D3622E46177F4F89009DEEEB /* GRRequestProtocol.h */,
 				D3622E27177F3AA7009DEEEB /* GRRequest.h */,
@@ -335,6 +340,7 @@
 				D3622E3E177F3AA7009DEEEB /* GRRequestListDirectory.m in Sources */,
 				D3622E40177F3AA7009DEEEB /* GRRequestUpload.m in Sources */,
 				D3622E41177F3AA7009DEEEB /* GRStreamInfo.m in Sources */,
+				D3622E49177F64B4009DEEEB /* GRQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
