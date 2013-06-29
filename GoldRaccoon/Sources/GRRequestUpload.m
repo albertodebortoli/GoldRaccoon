@@ -14,7 +14,7 @@
 
 #import "GRRequestUpload.h"
 
-@interface GRRequestUpload ()
+@interface GRRequestUpload () <GRRequestDelegate, GRRequestDataSource>
 @end
 
 @implementation GRRequestUpload
@@ -37,14 +37,13 @@
     }
     
     // we first list the directory to see if our folder is up on the server
-    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self];
+    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
 	self.listrequest.passiveMode = self.passiveMode;
     self.listrequest.path = [self.path stringByDeletingLastPathComponent];
-    self.listrequest.hostname = self.hostname;
-    self.listrequest.username = self.username;
-    self.listrequest.password = self.password;
     [self.listrequest start];
 }
+
+#pragma mark - GRRequestDelegate
 
 /**
  
@@ -86,6 +85,25 @@
 {
     return [self.delegate shouldOverwriteFileWithRequest:request];
 }
+
+#pragma mark - GRRequestDataSource
+
+- (NSString *)hostname
+{
+    return [self.dataSource hostname];
+}
+
+- (NSString *)username
+{
+    return [self.dataSource username];
+}
+
+- (NSString *)password
+{
+    return [self.dataSource password];
+}
+
+#pragma mark - NSStreamDelegate
 
 /**
  

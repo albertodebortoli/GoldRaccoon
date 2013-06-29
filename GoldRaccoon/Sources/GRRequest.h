@@ -27,7 +27,8 @@
 }
 
 @property (nonatomic, weak) id <GRRequestDelegate> delegate;
+@property (nonatomic, weak) id <GRRequestDataSource> dataSource;
 
-- (instancetype)initWithDelegate:(id)delegate;
+- (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource;
 
 @end

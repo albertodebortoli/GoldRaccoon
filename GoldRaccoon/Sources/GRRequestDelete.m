@@ -43,20 +43,19 @@
 {
     SInt32 errorcode;
     
-    if (self.hostname==nil) {
-        InfoLog(@"The host name is nil!");
-        [self.streamInfo streamError: self errorCode: kGRFTPClientHostnameIsNil];
+    if ([self.dataSource hostname] == nil) {
+        [self.streamInfo streamError:self errorCode:kGRFTPClientHostnameIsNil];
         return;
     }
     
     if (CFURLDestroyResource(( __bridge CFURLRef) self.fullURLWithEscape, &errorcode)) {
         // successful
-        [self.streamInfo streamComplete: self];
+        [self.streamInfo streamComplete:self];
     }
     
     else {
         // unsuccessful        
-        [self.streamInfo streamError: self errorCode: kGRFTPClientCantDeleteFileOrDirectory];
+        [self.streamInfo streamError:self errorCode: kGRFTPClientCantDeleteFileOrDirectory];
     }
 }
 

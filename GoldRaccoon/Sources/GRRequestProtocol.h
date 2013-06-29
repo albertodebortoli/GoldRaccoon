@@ -25,10 +25,6 @@
 @property BOOL passiveMode;
 @property NSString *uuid;
 
-@property NSString *username;
-@property NSString *password;
-@property NSString *hostname;
-
 @property (readonly) NSURL *fullURL;
 @property NSString *path;
 @property (strong) GRRequestError *error;
@@ -74,3 +70,11 @@
 
 @end
 
+@protocol GRRequestDataSource <NSObject>
+
+@required
+- (NSString *)hostname;
+- (NSString *)username;
+- (NSString *)password;
+
+@end

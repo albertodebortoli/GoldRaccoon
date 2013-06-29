@@ -20,12 +20,13 @@
 @protocol GRRequestsManagerDelegate <NSObject>
 
 @optional
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didStartRequest:(GRRequest *)request;
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteRequestUpload:(GRRequestUpload *)request;
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteRequestDownload:(GRRequestDownload *)request;
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailWritingFileAtPath:(NSString *)path forRequest:(GRRequest *)request error:(NSError *)error;
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(GRRequest *)request withError:(NSError *)error;
-- (void)ftpRequestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompletePercent:(float)percent forRequest:(GRRequest *)request;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didStartRequest:(GRRequest *)request;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteRequestUpload:(GRRequestUpload *)request;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteRequestDownload:(GRRequestDownload *)request;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteRequestListing:(GRRequestListDirectory *)request listing:(NSArray *)listing;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailWritingFileAtPath:(NSString *)path forRequest:(GRRequest *)request error:(NSError *)error;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(GRRequest *)request withError:(NSError *)error;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompletePercent:(float)percent forRequest:(GRRequest *)request;
 
 @end
 

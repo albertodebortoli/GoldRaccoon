@@ -14,6 +14,10 @@
 
 #import "GRRequestCreateDirectory.h"
 
+@interface GRRequestCreateDirectory () <GRRequestDelegate, GRRequestDataSource>
+
+@end
+
 @implementation GRRequestCreateDirectory
 
 @synthesize listrequest;
@@ -46,13 +50,12 @@
     }
     
     // we first list the directory to see if our folder is up already
-    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self];
+    self.listrequest = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
     self.listrequest.path = [self.path stringByDeletingLastPathComponent];
-    self.listrequest.hostname = self.hostname;
-    self.listrequest.username = self.username;
-    self.listrequest.password = self.password;
     [self.listrequest start];
 }
+
+#pragma mark - GRRequestDelegate
 
 /**
  
@@ -87,6 +90,25 @@
 {
     return NO;
 }
+
+#pragma mark - GRRequestDataSource
+
+- (NSString *)hostname
+{
+    return [self.dataSource hostname];
+}
+
+- (NSString *)username
+{
+    return [self.dataSource username];
+}
+
+- (NSString *)password
+{
+    return [self.dataSource password];
+}
+
+#pragma mark - NSStreamDelegate
 
 /**
  

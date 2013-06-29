@@ -93,7 +93,7 @@
  */
 - (NSString *)fullRemotePath
 {
-    return [self.hostname stringByAppendingPathComponent:self.path];
+    return [[self.dataSource hostname] stringByAppendingPathComponent:self.path];
 }
 
 @end

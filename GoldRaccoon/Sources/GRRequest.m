@@ -18,8 +18,6 @@
 
 @synthesize passiveMode;
 @synthesize uuid;
-@synthesize password;
-@synthesize username;
 @synthesize error;
 @synthesize maximumSize;
 @synthesize percentCompleted;
@@ -29,20 +27,16 @@
 @synthesize didOpenStream;
 
 @synthesize path = _path;
-@synthesize hostname = _hostname;
 
 /**
  
  */
-- (id)initWithDelegate:(id<GRRequestDelegate>)aDelegate
+- (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource
 {
     self = [super init];
     if (self) {
 		self.passiveMode = YES;
         self.uuid     = nil;
-        self.password = nil;
-        self.username = nil;
-        self.hostname = nil;
         self.path = @"";
         
         streamInfo = [[GRStreamInfo alloc] init];
@@ -53,6 +47,7 @@
         self.streamInfo.timeout = 30;
         
         self.delegate = aDelegate;
+        self.dataSource = aDatasource;
     }
     return self;
 }
@@ -64,7 +59,7 @@
  */
 - (NSURL *)fullURL
 {
-    NSString *fullURLString = [NSString stringWithFormat: @"ftp://%@%@", self.hostname, self.path];
+    NSString *fullURLString = [NSString stringWithFormat: @"ftp://%@%@", [self.dataSource hostname], self.path];
     
     return [NSURL URLWithString:fullURLString];
 }
@@ -74,8 +69,8 @@
  */
 - (NSURL *)fullURLWithEscape
 {
-    NSString *escapedUsername = [self encodeString: username];
-    NSString *escapedPassword = [self encodeString: password];
+    NSString *escapedUsername = [self encodeString:[self.dataSource username]];
+    NSString *escapedPassword = [self encodeString:[self.dataSource password]];
     NSString *cred;
     
     if (escapedUsername != nil) {
@@ -91,8 +86,8 @@
     }
     cred = [cred stringByStandardizingPath];
     
-    NSString * fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, self.hostname, self.path];
-    return [NSURL URLWithString: fullURLString];
+    NSString * fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, [self.dataSource hostname], self.path];
+    return [NSURL URLWithString:fullURLString];
 }
 
 /**
@@ -110,7 +105,7 @@
     }
     
     // now make sure that we have escaped all special characters
-    escapedPath = [self encodeString: escapedPath];
+    escapedPath = [self encodeString:escapedPath];
     
     return escapedPath;
 }
@@ -121,22 +116,6 @@
 - (void)setPath:(NSString *)directoryPathLocal
 {
     _path = directoryPathLocal;
-}
-
-/**
- 
- */
-- (NSString *)hostname
-{
-    return [_hostname stringByStandardizingPath];
-}
-
-/**
- 
- */
-- (void)setHostname:(NSString *)hostnamelocal
-{
-    _hostname = hostnamelocal;
 }
 
 /**

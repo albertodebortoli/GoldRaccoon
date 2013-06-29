@@ -12,12 +12,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 @interface GRQueue : NSObject
 
+@property (nonatomic, readonly) int count;
+
 - (void)enqueue:(id)object;
 - (id)dequeue;
 - (BOOL)removeObject:(id)object;
 - (NSArray *)allItems;
 - (void)clear;
-
-@property (nonatomic, readonly) int count;
 
 @end

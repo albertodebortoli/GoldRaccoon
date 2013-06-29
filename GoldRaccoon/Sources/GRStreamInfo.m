@@ -45,7 +45,7 @@ dispatch_queue_t dispatch_get_local_queue()
  */
 - (void)openRead:(GRRequest *)request
 {
-    if (request.hostname == nil) {
+    if ([request.dataSource hostname] == nil) {
         InfoLog(@"The host name is nil!");
         request.error = [[GRRequestError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
@@ -60,8 +60,8 @@ dispatch_queue_t dispatch_get_local_queue()
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue : kCFBooleanFalse);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
-    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) request.username);
-    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) request.password);
+    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
+    CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
     readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
     
     if (readStream==nil)
@@ -96,8 +96,7 @@ dispatch_queue_t dispatch_get_local_queue()
  */
 - (void)openWrite:(GRRequest *)request
 {
-    if (request.hostname==nil)
-    {
+    if ([request.dataSource hostname] == nil) {
         InfoLog(@"The host name is nil!");
         request.error = [[GRRequestError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
@@ -111,8 +110,8 @@ dispatch_queue_t dispatch_get_local_queue()
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 	CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUsePassiveMode, request.passiveMode ? kCFBooleanTrue : kCFBooleanFalse);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
-    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) request.username);
-    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) request.password);
+    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource username]);
+    CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource password]);
     
     writeStream = ( __bridge_transfer NSOutputStream *) writeStreamRef;
     

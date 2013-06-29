@@ -16,14 +16,13 @@
 
 #import "GRQueue.h"
 
-@interface GRRequestsManager () <GRRequestDelegate>
+@interface GRRequestsManager () <GRRequestDelegate, GRRequestDataSource>
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
 @property (nonatomic, strong) GRQueue *requestQueue;
 @property (nonatomic, strong) GRRequest *currentRequest;
 
-- (void)_fillRequestWithHostAndCredentials:(GRRequest **)request;
 - (void)_enqueueRequest:(GRRequest *)request;
 - (void)_processNextRequest;
 
@@ -38,6 +37,7 @@
 @private
     BOOL _delegateRespondsToUploadCompletion;
     BOOL _delegateRespondsToDownloadCompletion;
+    BOOL _delegateRespondsToListDirectoryCompletion;
     BOOL _delegateRespondsToFailure;
     BOOL _delegateRespondsToWritingFailure;
     BOOL _delegateRespondsToPercentProgress;
@@ -65,6 +65,7 @@
         _isRunning = NO;
         _delegateRespondsToUploadCompletion = NO;
         _delegateRespondsToDownloadCompletion = NO;
+        _delegateRespondsToListDirectoryCompletion = NO;
         _delegateRespondsToFailure = NO;
         _delegateRespondsToWritingFailure = NO;
         _delegateRespondsToPercentProgress = NO;
@@ -83,11 +84,12 @@
 {
     if (_delegate != delegate) {
         _delegate = delegate;
-        _delegateRespondsToUploadCompletion = [_delegate respondsToSelector:@selector(ftpRequestsManager:didCompleteRequestUpload:)];
-        _delegateRespondsToDownloadCompletion = [_delegate respondsToSelector:@selector(ftpRequestsManager:didCompleteRequestDownload:)];
-        _delegateRespondsToFailure = [_delegate respondsToSelector:@selector(ftpRequestsManager:didFailRequest:withError:)];
-        _delegateRespondsToWritingFailure = [_delegate respondsToSelector:@selector(ftpRequestsManager:didFailWritingFileAtPath:forRequest:error:)];
-        _delegateRespondsToPercentProgress = [_delegate respondsToSelector:@selector(ftpRequestsManager:didCompletePercent:forRequest:)];
+        _delegateRespondsToUploadCompletion = [_delegate respondsToSelector:@selector(requestsManager:didCompleteRequestUpload:)];
+        _delegateRespondsToDownloadCompletion = [_delegate respondsToSelector:@selector(requestsManager:didCompleteRequestDownload:)];
+        _delegateRespondsToListDirectoryCompletion = [_delegate respondsToSelector:@selector(requestsManager:didCompleteRequestListing:listing:)];
+        _delegateRespondsToFailure = [_delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)];
+        _delegateRespondsToWritingFailure = [_delegate respondsToSelector:@selector(requestsManager:didFailWritingFileAtPath:forRequest:error:)];
+        _delegateRespondsToPercentProgress = [_delegate respondsToSelector:@selector(requestsManager:didCompletePercent:forRequest:)];
     }
 }
 
@@ -119,8 +121,7 @@
 
 - (GRRequestCreateDirectory *)addRequestForCreateDirectoryAtPath:(NSString *)path
 {
-    GRRequestCreateDirectory *request = [[GRRequestCreateDirectory alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestCreateDirectory *request = [[GRRequestCreateDirectory alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
@@ -129,8 +130,7 @@
 
 - (GRRequestDelete *)addRequestForDeleteDirectoryAtPath:(NSString *)path
 {
-    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
@@ -139,8 +139,7 @@
 
 - (GRRequestListDirectory *)addRequestForListDirectoryAtPath:(NSString *)path
 {
-    GRRequestListDirectory *request = [[GRRequestListDirectory alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestListDirectory *request = [[GRRequestListDirectory alloc] initWithDelegate:self datasource:self];
     request.path = path;
     
     [self _enqueueRequest:request];
@@ -149,8 +148,7 @@
 
 - (GRRequestDownload *)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
 {
-    GRRequestDownload *request = [[GRRequestDownload alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestDownload *request = [[GRRequestDownload alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
     request.localFilepath = localPath;
     
@@ -160,8 +158,7 @@
 
 - (GRRequestUpload *)addRequestForUploadFileAtLocalPath:(NSString *)localPath toRemotePath:(NSString *)remotePath
 {
-    GRRequestUpload *request = [[GRRequestUpload alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestUpload *request = [[GRRequestUpload alloc] initWithDelegate:self datasource:self];
     request.path = remotePath;
     request.localFilepath = localPath;
     
@@ -171,8 +168,7 @@
 
 - (GRRequestDelete *)addRequestForDeleteFileAtPath:(NSString *)filepath
 {
-    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self];
-    [self _fillRequestWithHostAndCredentials:&request];
+    GRRequestDelete *request = [[GRRequestDelete alloc] initWithDelegate:self datasource:self];
     request.path = filepath;
     
     [self _enqueueRequest:request];
@@ -185,7 +181,7 @@
 {
     if ([request isKindOfClass:[GRRequestUpload class]]) {
         if (_delegateRespondsToUploadCompletion) {
-            [self.delegate ftpRequestsManager:self didCompleteRequestUpload:(GRRequestUpload *)request];
+            [self.delegate requestsManager:self didCompleteRequestUpload:(GRRequestUpload *)request];
         }
         _currentUploadData = nil;
     }
@@ -198,25 +194,31 @@
         
         if (writeToFileSucceeded && !writeError) {
             if (_delegateRespondsToDownloadCompletion) {
-                [self.delegate ftpRequestsManager:self didCompleteRequestDownload:(GRRequestDownload *)request];
+                [self.delegate requestsManager:self didCompleteRequestDownload:(GRRequestDownload *)request];
             }
         }
         else {
             if (_delegateRespondsToWritingFailure) {
-                [self.delegate ftpRequestsManager:self
-                        didFailWritingFileAtPath:((GRRequestDownload *)request).localFilepath
-                                      forRequest:request
-                                           error:writeError];
+                [self.delegate requestsManager:self
+                      didFailWritingFileAtPath:((GRRequestDownload *)request).localFilepath
+                                    forRequest:request
+                                         error:writeError];
             }
         }
         _currentDownloadData = nil;
     }
     
-    // for listing
-    // for (NSDictionary *file in (((GRRequestListDirectory *)request).filesInfo)
-    // {
-    //     NSLog(@"%@", [file objectForKey:(id)kCFFTPResourceName]);
-    // }
+    else if ([request isKindOfClass:[GRRequestListDirectory class]]) {
+        NSMutableArray *listing = [NSMutableArray array];
+        for (NSDictionary *file in ((GRRequestListDirectory *)request).filesInfo) {
+            [listing addObject:[file objectForKey:(id)kCFFTPResourceName]];
+        }
+        if (_delegateRespondsToListDirectoryCompletion) {
+            [self.delegate requestsManager:self
+                 didCompleteRequestListing:((GRRequestListDirectory *)request)
+                                   listing:listing];
+        }
+    }
     
     [self _processNextRequest];
 }
@@ -224,9 +226,9 @@
 - (void)requestFailed:(GRRequest *)request
 {
     if (_delegateRespondsToFailure) {
-        NSError *error = [NSError errorWithDomain:@"com.ef.e1.classroom.dpw.ftpservice" code:-1000 userInfo:@{@"message": request.error.message}];
+        NSError *error = [NSError errorWithDomain:@"com.github.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
         if (_delegateRespondsToFailure) {
-            [self.delegate ftpRequestsManager:self didFailRequest:request withError:error];
+            [self.delegate requestsManager:self didFailRequest:request withError:error];
         }
     }
     
@@ -235,7 +237,7 @@
 
 - (BOOL)shouldOverwriteFileWithRequest:(GRRequest *)request
 {
-    // called only with GRRequestUpload requests 
+    // called only with GRRequestUpload requests
     return YES;
 }
 
@@ -244,7 +246,7 @@
 - (void)percentCompleted:(GRRequest *)request
 {
     if (_delegateRespondsToPercentProgress) {
-        [self.delegate ftpRequestsManager:self didCompletePercent:request.percentCompleted forRequest:request];
+        [self.delegate requestsManager:self didCompletePercent:request.percentCompleted forRequest:request];
     }
     
     //NSLog(@"%f completed...", request.percentCompleted);
@@ -296,14 +298,24 @@
     return temp;
 }
 
-#pragma mark - Private Methods
+#pragma mark - GRRequestDataSource
 
-- (void)_fillRequestWithHostAndCredentials:(GRRequest **)request
+- (NSString *)hostname
 {
-    ((GRRequest *)*request).hostname = self.hostname;
-    ((GRRequest *)*request).username = self.username;
-    ((GRRequest *)*request).password = self.password;
+    return self.hostname;
 }
+
+- (NSString *)username
+{
+    return self.username;
+}
+
+- (NSString *)password
+{
+    return self.password;
+}
+
+#pragma mark - Private Methods
 
 - (void)_enqueueRequest:(GRRequest *)request
 {
@@ -328,7 +340,7 @@
     }
     
     [self.currentRequest start];
-    [self.delegate ftpRequestsManager:self didStartRequest:self.currentRequest];
+    [self.delegate requestsManager:self didStartRequest:self.currentRequest];
 }
 
 @end
