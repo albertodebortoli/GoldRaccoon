@@ -44,7 +44,7 @@
 
 @protocol GRDataExchangeRequestProtocol <GRRequestProtocol>
 
-@property (nonatomic, copy) NSString *localFilepath;
+@property (nonatomic, copy) NSString *localFilePath;
 @property (nonatomic, readonly) NSString *fullRemotePath;
 
 @end

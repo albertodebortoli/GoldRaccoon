@@ -27,7 +27,7 @@
 @implementation GRUploadRequest
 
 @synthesize listingRequest;
-@synthesize localFilepath;
+@synthesize localFilePath;
 @synthesize fullRemotePath;
 
 /**

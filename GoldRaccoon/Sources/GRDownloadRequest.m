@@ -23,7 +23,7 @@
 @implementation GRDownloadRequest
 
 @synthesize receivedData;
-@synthesize localFilepath;
+@synthesize localFilePath;
 @synthesize fullRemotePath;
 
 /**
