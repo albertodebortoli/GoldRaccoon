@@ -28,6 +28,11 @@
 @property (nonatomic, weak) id <GRRequestDelegate> delegate;
 @property (nonatomic, weak) id <GRRequestDataSource> dataSource;
 
+@property (nonatomic, readonly) long bytesSent;                 // will have bytes from the last FTP call
+@property (nonatomic, readonly) long totalBytesSent;            // will have bytes total sent
+@property (nonatomic, assign) BOOL didOpenStream;               // whether the stream opened or not
+@property (nonatomic, assign) BOOL cancelDoesNotCallDelegate;   // cancel closes stream without calling delegate
+
 - (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource;
 
 @end

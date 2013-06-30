@@ -224,12 +224,6 @@
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// description:	dataAvailable:forRequest: is used as part of the file download.
-//
-// important:   This is required to download data. If this method is missing
-//              and you attempt to download, you will get a runtime error.
-////////////////////////////////////////////////////////////////////////////////
 - (void)dataAvailable:(NSData *)data forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     [_currentDownloadData appendData:data];
@@ -258,16 +252,9 @@
     return self.password;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// important:   This is an optional method when uploading. It is purely used
-//              to help calculate the percent completed.
-//
-//              If this method is missing, then the send size defaults to LONG_MAX
-//              or about 2 gig.
-////////////////////////////////////////////////////////////////////////////////
-- (long)requestDataSendSize:(id<GRDataExchangeRequestProtocol>)request
+- (long)dataSizeForUploadRequest:(id<GRDataExchangeRequestProtocol>)request
 {
-    // user returns the total size of data to send. Used ONLY for percentComplete
+    // user returns the total size of data to send. Used ONLY to calculate percentComplete.
     return [_currentUploadData length];
 }
 
@@ -280,7 +267,7 @@
 //              If this method is missing, it you will get a runtime error indicating
 //              this method is missing.
 ////////////////////////////////////////////////////////////////////////////////
-- (NSData *)requestDataToSend:(id<GRDataExchangeRequestProtocol>)request
+- (NSData *)dataForUploadRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     // returns data object or nil when complete
     // basically, first time we return the pointer to the NSData.

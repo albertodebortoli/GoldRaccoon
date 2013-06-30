@@ -22,13 +22,20 @@
 
 @implementation GRDownloadRequest
 
+@synthesize passiveMode;
+@synthesize uuid;
+@synthesize error;
+@synthesize streamInfo;
+@synthesize maximumSize;
+@synthesize percentCompleted;
+@synthesize delegate;
+@synthesize didOpenStream;
+@synthesize path;
+
 @synthesize receivedData;
 @synthesize localFilePath;
 @synthesize fullRemotePath;
 
-/**
- 
- */
 - (void)start
 {
     if ([self.delegate respondsToSelector:@selector(dataAvailable:forRequest:)] == NO) {
@@ -42,14 +49,12 @@
     [self.streamInfo openRead:self];
 }
 
-/**
- 
- */
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
     // see if we have cancelled the runloop
-    if ([self.streamInfo checkCancelRequest:self])
+    if ([self.streamInfo checkCancelRequest:self]) {
         return;
+    }
     
     switch (streamEvent) {
         case NSStreamEventOpenCompleted: {
@@ -64,7 +69,9 @@
             self.receivedData = [self.streamInfo read:self];
             
             if (self.receivedData) {
-                [self.delegate dataAvailable:self.receivedData forRequest:self];
+                if ([self.delegate respondsToSelector:@selector(dataAvailable:forRequest:)]) {
+                    [self.delegate dataAvailable:self.receivedData forRequest:self];
+                }
             }
             else {
                 NSLog(@"Stream opened, but failed while trying to read from it.");
@@ -94,9 +101,6 @@
     }
 }
 
-/**
- 
- */
 - (NSString *)fullRemotePath
 {
     return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];

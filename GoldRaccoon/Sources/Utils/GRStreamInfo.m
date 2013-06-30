@@ -40,9 +40,6 @@ dispatch_queue_t dispatch_get_local_queue()
     return _queue;
 }
 
-/**
- 
- */
 - (void)openRead:(GRRequest *)request
 {
     if ([request.dataSource hostnameForRequest:request] == nil) {
@@ -91,9 +88,6 @@ dispatch_queue_t dispatch_get_local_queue()
     });
 }
 
-/**
- 
- */
 - (void)openWrite:(GRRequest *)request
 {
     if ([request.dataSource hostnameForRequest:request] == nil) {
@@ -140,9 +134,6 @@ dispatch_queue_t dispatch_get_local_queue()
     });
 }
 
-/**
- 
- */
 - (BOOL)checkCancelRequest:(GRRequest *)request
 {
     if (!cancelRequestFlag) {
@@ -163,9 +154,6 @@ dispatch_queue_t dispatch_get_local_queue()
     return YES;
 }
 
-/**
- 
- */
 - (NSData *)read:(GRRequest *)request
 {
     NSData *data;
@@ -197,9 +185,6 @@ dispatch_queue_t dispatch_get_local_queue()
     return nil;
 }
 
-/**
- 
- */
 - (BOOL)write:(GRRequest *)request data:(NSData *)data
 {
     bytesThisIteration = [writeStream write: [data bytes] maxLength: [data length]];
@@ -224,9 +209,6 @@ dispatch_queue_t dispatch_get_local_queue()
     return NO;
 }
 
-/**
- 
- */
 - (void)streamError:(GRRequest *)request errorCode:(enum BRErrorCodes)errorCode
 {
     request.error = [[GRError alloc] init];
@@ -235,18 +217,12 @@ dispatch_queue_t dispatch_get_local_queue()
     [request.streamInfo close: request];
 }
 
-/**
- 
- */
 - (void)streamComplete:(GRRequest *)request
 {
     [request.delegate requestCompleted: request];
     [request.streamInfo close: request];
 }
 
-/**
- 
- */
 - (void)close:(GRRequest *)request
 {
     if (readStream) {

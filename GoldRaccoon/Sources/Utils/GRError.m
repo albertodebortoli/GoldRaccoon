@@ -18,9 +18,6 @@
 
 @synthesize errorCode;
 
-/**
- 
- */
 + (BRErrorCodes)errorCodeWithError:(NSError *)error
 {
     // As suggested by RMaddy
@@ -34,9 +31,6 @@
     return 0;
 }
 
-/**
- 
- */
 - (NSString *)message
 {
     NSString *errorMessage;

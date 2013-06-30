@@ -16,9 +16,6 @@
 
 @implementation GRDeleteRequest
 
-/**
- 
- */
 - (NSString *)path
 {
     NSString *lastCharacter = [_path substringFromIndex:[_path length] - 1];
@@ -36,9 +33,6 @@
     return directoryPath;
 }
 
-/**
- 
- */
 - (void)start
 {
     SInt32 errorcode;

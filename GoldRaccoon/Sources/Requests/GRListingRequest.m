@@ -25,9 +25,6 @@
 @synthesize filesInfo;
 @synthesize receivedData;
 
-/**
- 
- */
 - (BOOL)fileExists:(NSString *)fileNamePath
 {
     NSString *fileName = [[fileNamePath lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
@@ -42,9 +39,6 @@
     return NO;
 }
 
-/**
- 
- */
 - (NSString *)path
 {
     // the path will always point to a directory, so we add the final slash to it (if there was one before escaping/standardizing, it's *gone* now)
@@ -55,9 +49,6 @@
     return directoryPath;
 }
 
-/**
- 
- */
 - (void)start
 {
     self.maximumSize = LONG_MAX;
@@ -67,9 +58,6 @@
     [self.streamInfo openRead:self];
 }
 
-/**
- 
- */
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
     NSData *data;

@@ -19,34 +19,29 @@
 @synthesize passiveMode;
 @synthesize uuid;
 @synthesize error;
+@synthesize streamInfo;
 @synthesize maximumSize;
 @synthesize percentCompleted;
-
 @synthesize delegate;
-@synthesize streamInfo;
 @synthesize didOpenStream;
-
 @synthesize path = _path;
 
-/**
- 
- */
 - (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource
 {
     self = [super init];
     if (self) {
 		self.passiveMode = YES;
-        self.uuid     = nil;
-        self.path = @"";
+        self.uuid        = [[NSUUID UUID] UUIDString];
+        self.path        = nil;
         
-        streamInfo = [[GRStreamInfo alloc] init];
+        self.streamInfo = [[GRStreamInfo alloc] init];
         self.streamInfo.readStream = nil;
         self.streamInfo.writeStream = nil;
         self.streamInfo.bytesThisIteration = 0;
         self.streamInfo.bytesTotal = 0;
         self.streamInfo.timeout = 30;
         
-        self.delegate = aDelegate;
+        self.delegate   = aDelegate;
         self.dataSource = aDatasource;
     }
     return self;
@@ -54,19 +49,18 @@
 
 #pragma mark - GRRequestProtocol
 
-/**
- 
- */
 - (NSURL *)fullURL
 {
-    NSString *fullURLString = [NSString stringWithFormat: @"ftp://%@%@", [self.dataSource hostnameForRequest:self], self.path];
-    
+    NSString *hostname = [self.dataSource hostnameForRequest:self];
+    NSString *ftpPrefix = @"ftp://";
+    if ([[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
+        hostname = [hostname substringFromIndex:6];
+    }
+    NSString *fullURLString = [NSString stringWithFormat:@"%@%@%@", ftpPrefix, hostname, self.path];
     return [NSURL URLWithString:fullURLString];
+    
 }
 
-/**
- 
- */
 - (NSURL *)fullURLWithEscape
 {
     NSString *escapedUsername = [self encodeString:[self.dataSource usernameForRequest:self]];
@@ -86,13 +80,16 @@
     }
     cred = [cred stringByStandardizingPath];
     
-    NSString *fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, [self.dataSource hostnameForRequest:self], self.path];
+    NSString *hostname = [self.dataSource hostnameForRequest:self];
+    NSString *ftpPrefix = @"ftp://";
+    if ([[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
+        hostname = [hostname substringFromIndex:6];
+    }
+    
+    NSString *fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, hostname, self.path];
     return [NSURL URLWithString:fullURLString];
 }
 
-/**
- 
- */
 - (NSString *)path
 {
     // we remove all the extra slashes from the directory path, including the last one (if there is one)
@@ -110,17 +107,11 @@
     return escapedPath;
 }
 
-/**
- 
- */
 - (void)setPath:(NSString *)directoryPathLocal
 {
     _path = directoryPathLocal;
 }
 
-/**
- 
- */
 - (NSString *)encodeString:(NSString *)string;
 {
     NSString *urlEncoded = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(
@@ -132,68 +123,44 @@
     return urlEncoded;
 }  
 
-/**
- 
- */
 - (void)start
 {
-    
+    // override in subclasses
 }
 
-/**
- 
- */
 - (long)bytesSent
 {
     return self.streamInfo.bytesThisIteration;
 }
 
-/**
- 
- */
 - (long)totalBytesSent
 {
     return self.streamInfo.bytesTotal;
 }
 
-/**
- 
- */
 - (long)timeout
 {
     return self.streamInfo.timeout;
 }
 
-/**
- 
- */
 - (void)setTimeout:(long)timeout
 {
     self.streamInfo.timeout = timeout;
 }
 
-/**
- 
- */
 - (void)cancelRequest
 {
     self.streamInfo.cancelRequestFlag = TRUE;
 }
 
-/**
- 
- */
-- (void)setCancelDoesNotCallDelegate:(BOOL)cancelDoesNotCallDelegate
-{
-    self.streamInfo.cancelDoesNotCallDelegate = cancelDoesNotCallDelegate;
-}
-
-/**
- 
- */
 - (BOOL)cancelDoesNotCallDelegate
 {
     return self.streamInfo.cancelDoesNotCallDelegate;
+}
+
+- (void)setCancelDoesNotCallDelegate:(BOOL)cancelDoesNotCallDelegate
+{
+    self.streamInfo.cancelDoesNotCallDelegate = cancelDoesNotCallDelegate;
 }
 
 @end

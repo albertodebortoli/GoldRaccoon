@@ -26,20 +26,27 @@
 
 @implementation GRUploadRequest
 
+@synthesize passiveMode;
+@synthesize uuid;
+@synthesize error;
+@synthesize streamInfo;
+@synthesize maximumSize;
+@synthesize percentCompleted;
+@synthesize delegate;
+@synthesize didOpenStream;
+@synthesize path;
+
 @synthesize listingRequest;
 @synthesize localFilePath;
 @synthesize fullRemotePath;
 
-/**
- 
- */
 - (void)start
 {
     self.maximumSize = LONG_MAX;
     _bytesIndex = 0;
     _bytesRemaining = 0;
     
-    if ([self.dataSource respondsToSelector:@selector(requestDataToSend:)] == NO) {
+    if ([self.dataSource respondsToSelector:@selector(dataForUploadRequest:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
         NSLog(@"%@", self.error.message);
         return;
@@ -54,9 +61,6 @@
 
 #pragma mark - GRRequestDelegate
 
-/**
- 
- */
 - (void)requestCompleted:(GRRequest *)request
 {
     NSString * fileName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
@@ -69,8 +73,8 @@
         }
     }
     
-    if ([self.dataSource respondsToSelector:@selector(requestDataSendSize:)]) {
-        self.maximumSize = [self.dataSource requestDataSendSize:self];
+    if ([self.dataSource respondsToSelector:@selector(dataSizeForUploadRequest:)]) {
+        self.maximumSize = [self.dataSource dataSizeForUploadRequest:self];
     }
     
     // open the write stream and check for errors calling delegate methods
@@ -79,17 +83,11 @@
 }
 
 
-/**
- 
- */
 - (void)requestFailed:(GRRequest *)request
 {
     [self.delegate requestFailed:request];
 }
 
-/**
- 
- */
 - (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     return [self.delegate shouldOverwriteFile:filePath forRequest:request];
@@ -114,9 +112,6 @@
 
 #pragma mark - NSStreamDelegate
 
-/**
- 
- */
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
     // see if we have cancelled the runloop
@@ -137,7 +132,12 @@
             
         case NSStreamEventHasSpaceAvailable: {
             if (_bytesRemaining == 0) {
-                _sentData = [self.dataSource requestDataToSend:self];
+                if ([self.dataSource respondsToSelector:@selector(dataForUploadRequest:)]) {
+                    _sentData = [self.dataSource dataForUploadRequest:self];
+                }
+                else {
+                    return;
+                }
                 _bytesRemaining = [_sentData length];
                 _bytesIndex = 0;
                 
@@ -178,9 +178,6 @@
     }
 }
 
-/**
- 
- */
 - (NSString *)fullRemotePath
 {
     return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];

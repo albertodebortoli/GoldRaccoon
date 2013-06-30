@@ -25,9 +25,6 @@
 
 @synthesize listrequest;
 
-/**
- 
- */
 - (NSString *)path
 {
     // the path will always point to a directory, so we add the final slash to it (if there was one before escaping/standardizing, it's *gone* now)
@@ -39,9 +36,6 @@
     return directoryPath;
 }
 
-/**
- 
- */
 - (void)start
 {
     if ([self hostnameForRequest:self] == nil) {
@@ -60,9 +54,6 @@
 
 #pragma mark - GRRequestDelegate
 
-/**
- 
- */
 - (void)requestCompleted:(GRRequest *)request
 {
     NSString *directoryName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
@@ -78,17 +69,12 @@
     }
 }
 
-/**
- 
- */
+
 - (void)requestFailed:(GRRequest *)request
 {
     [self.delegate requestFailed:request];
 }
 
-/**
- 
- */
 - (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request
 {
     return NO;
@@ -113,9 +99,6 @@
 
 #pragma mark - NSStreamDelegate
 
-/**
- 
- */
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
     switch (streamEvent) {

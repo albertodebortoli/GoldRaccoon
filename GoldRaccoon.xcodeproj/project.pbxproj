@@ -120,6 +120,9 @@
 		D31F550C17803EBF00387402 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				D31F551717803EBF00387402 /* GRRequestProtocol.h */,
+				D31F551517803EBF00387402 /* GRRequest.h */,
+				D31F551617803EBF00387402 /* GRRequest.m */,
 				D31F550D17803EBF00387402 /* GRCreateDirectoryRequest.h */,
 				D31F550E17803EBF00387402 /* GRCreateDirectoryRequest.m */,
 				D31F550F17803EBF00387402 /* GRDeleteRequest.h */,
@@ -128,9 +131,6 @@
 				D31F551217803EBF00387402 /* GRDownloadRequest.m */,
 				D31F551317803EBF00387402 /* GRListingRequest.h */,
 				D31F551417803EBF00387402 /* GRListingRequest.m */,
-				D31F551517803EBF00387402 /* GRRequest.h */,
-				D31F551617803EBF00387402 /* GRRequest.m */,
-				D31F551717803EBF00387402 /* GRRequestProtocol.h */,
 				D31F551817803EBF00387402 /* GRUploadRequest.h */,
 				D31F551917803EBF00387402 /* GRUploadRequest.m */,
 			);

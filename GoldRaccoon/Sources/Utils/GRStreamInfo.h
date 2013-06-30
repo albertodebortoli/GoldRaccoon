@@ -16,29 +16,26 @@
 
 #define kGRDefaultBufferSize 32768
 
-@class GRRequest;
+@protocol GRRequestProtocol;
 
 @interface GRStreamInfo : NSObject
-{
-    NSOutputStream *writeStream;    
-    NSInputStream *readStream;
-}
 
-@property (strong) NSOutputStream *writeStream;    
-@property (strong) NSInputStream *readStream;
-@property long bytesThisIteration;
-@property long bytesTotal;
-@property long timeout;
-@property BOOL cancelRequestFlag;
-@property BOOL cancelDoesNotCallDelegate;
+@property (nonatomic, strong) NSOutputStream *writeStream;
+@property (nonatomic, strong) NSInputStream *readStream;
 
-- (void)openRead:(GRRequest *)request;
-- (void)openWrite:(GRRequest *)request;
-- (BOOL)checkCancelRequest:(GRRequest *)request;
-- (NSData *)read:(GRRequest *)request;
-- (BOOL)write:(GRRequest *)request data:(NSData *)data;
-- (void)streamError:(GRRequest *)request errorCode:(enum BRErrorCodes)errorCode;
-- (void)streamComplete:(GRRequest *)request;
-- (void)close:(GRRequest *)request;
+@property (nonatomic, assign) long bytesThisIteration;
+@property (nonatomic, assign) long bytesTotal;
+@property (nonatomic, assign) long timeout;
+@property (nonatomic, assign) BOOL cancelRequestFlag;
+@property (nonatomic, assign) BOOL cancelDoesNotCallDelegate;
+
+- (void)openRead:(id<GRRequestProtocol>)request;
+- (void)openWrite:(id<GRRequestProtocol>)request;
+- (BOOL)checkCancelRequest:(id<GRRequestProtocol>)request;
+- (NSData *)read:(id<GRRequestProtocol>)request;
+- (BOOL)write:(id<GRRequestProtocol>)request data:(NSData *)data;
+- (void)streamError:(id<GRRequestProtocol>)request errorCode:(enum BRErrorCodes)errorCode;
+- (void)streamComplete:(id<GRRequestProtocol>)request;
+- (void)close:(id<GRRequestProtocol>)request;
 
 @end

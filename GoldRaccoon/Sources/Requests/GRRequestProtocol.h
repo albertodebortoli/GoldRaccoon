@@ -23,19 +23,14 @@
 @property BOOL passiveMode;
 @property NSString *uuid;
 
-@property (readonly) NSURL *fullURL;
-@property NSString *path;
-@property (strong) GRError *error;
-@property float maximumSize;
-@property float percentCompleted;
-@property long timeout;
+@property (nonatomic) NSString *path;
+@property (nonatomic, strong) GRError *error;
+@property (nonatomic, strong) GRStreamInfo *streamInfo;
 
-@property GRStreamInfo *streamInfo;
-@property BOOL didOpenStream;               // whether the stream opened or not
-@property (readonly) long bytesSent;        // will have bytes from the last FTP call
-@property (readonly) long totalBytesSent;   // will have bytes total sent
-@property BOOL cancelDoesNotCallDelegate;   // cancel closes stream without calling delegate
+@property (nonatomic, assign) float maximumSize;
+@property (nonatomic, assign) float percentCompleted;
 
+- (NSURL *)fullURL;
 - (NSURL *)fullURLWithEscape;
 - (void)start;
 - (void)cancelRequest;
@@ -70,7 +65,7 @@
 - (NSString *)passwordForRequest:(id<GRRequestProtocol>)request;
 
 @optional
-- (long)requestDataSendSize:(id<GRDataExchangeRequestProtocol>)request;
-- (NSData *)requestDataToSend:(id<GRDataExchangeRequestProtocol>)request;
+- (long)dataSizeForUploadRequest:(id<GRDataExchangeRequestProtocol>)request;
+- (NSData *)dataForUploadRequest:(id<GRDataExchangeRequestProtocol>)request;
 
 @end
