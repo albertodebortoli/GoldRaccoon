@@ -97,19 +97,23 @@
 
 - (void)startProcessingRequests
 {
-    if (_isRunning == NO) {
-        _isRunning = YES;
-        [self _processNextRequest];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_isRunning == NO) {
+            _isRunning = YES;
+            [self _processNextRequest];
+        }
+    });
 }
 
 - (void)stopAndCancelAllRequests
 {
-    [self.requestQueue clear];
-    self.currentRequest.cancelDoesNotCallDelegate = TRUE;
-    [self.currentRequest cancelRequest];
-    self.currentRequest = nil;
-    _isRunning = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.requestQueue clear];
+        self.currentRequest.cancelDoesNotCallDelegate = TRUE;
+        [self.currentRequest cancelRequest];
+        self.currentRequest = nil;
+        _isRunning = NO;
+    });
 }
 
 - (BOOL)cancelRequest:(GRRequest *)request
