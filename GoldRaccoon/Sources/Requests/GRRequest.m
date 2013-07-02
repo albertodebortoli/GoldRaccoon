@@ -53,7 +53,7 @@
 {
     NSString *hostname = [self.dataSource hostnameForRequest:self];
     NSString *ftpPrefix = @"ftp://";
-    if ([[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
+    if (hostname.length >= 6 && [[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
         hostname = [hostname substringFromIndex:6];
     }
     NSString *fullURLString = [NSString stringWithFormat:@"%@%@%@", ftpPrefix, hostname, self.path];
@@ -82,7 +82,7 @@
     
     NSString *hostname = [self.dataSource hostnameForRequest:self];
     NSString *ftpPrefix = @"ftp://";
-    if ([[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
+    if (hostname.length >= 6 && [[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
         hostname = [hostname substringFromIndex:6];
     }
     

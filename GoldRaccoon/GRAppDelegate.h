@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class GRDemoViewController;
+
 @interface GRAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) GRDemoViewController *viewController;
 
 @end

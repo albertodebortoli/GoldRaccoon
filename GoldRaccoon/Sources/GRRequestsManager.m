@@ -53,6 +53,8 @@
 
 - (instancetype)initWithHostname:(NSString *)hostname user:(NSString *)username password:(NSString *)password
 {
+    NSAssert([hostname length], @"hostname must not be nil");
+    
     self = [super init];
     if (self) {
         _hostname = hostname;
@@ -84,23 +86,19 @@
 
 - (void)startProcessingRequests
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_isRunning == NO) {
-            _isRunning = YES;
-            [self _processNextRequest];
-        }
-    });
+    if (_isRunning == NO) {
+        _isRunning = YES;
+        [self _processNextRequest];
+    }
 }
 
 - (void)stopAndCancelAllRequests
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.requestQueue clear];
-        self.currentRequest.cancelDoesNotCallDelegate = TRUE;
-        [self.currentRequest cancelRequest];
-        self.currentRequest = nil;
-        _isRunning = NO;
-    });
+    [self.requestQueue clear];
+    self.currentRequest.cancelDoesNotCallDelegate = TRUE;
+    [self.currentRequest cancelRequest];
+    self.currentRequest = nil;
+    _isRunning = NO;
 }
 
 - (BOOL)cancelRequest:(GRRequest *)request
@@ -165,7 +163,7 @@
     }
 
     // delete request
-    if ([request isKindOfClass:[GRUploadRequest class]]) {
+    if ([request isKindOfClass:[GRDeleteRequest class]]) {
         if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteDeleteRequest:)]) {
             [self.delegate requestsManager:self didCompleteDeleteRequest:(GRUploadRequest *)request];
         }
@@ -321,8 +319,13 @@
         _currentUploadData = [NSData dataWithContentsOfFile:localFilepath];
     }
     
-    [self.currentRequest start];
-    [self.delegate requestsManager:self didStartRequest:self.currentRequest];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.currentRequest start];
+    });
+    
+    if ([self.delegate respondsToSelector:@selector(requestsManager:didStartRequest:)]) {
+        [self.delegate requestsManager:self didStartRequest:self.currentRequest];
+    }
 }
 
 @end
