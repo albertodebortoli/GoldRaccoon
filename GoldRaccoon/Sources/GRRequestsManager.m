@@ -1,6 +1,7 @@
 //
 //  GRRequestsManager.m
 //  GoldRaccoon
+//  v1.0.0
 //
 //  Created by Alberto De Bortoli on 14/06/2013.
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
