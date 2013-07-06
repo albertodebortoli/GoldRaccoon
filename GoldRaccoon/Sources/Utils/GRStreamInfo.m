@@ -209,7 +209,7 @@ dispatch_queue_t dispatch_get_local_queue()
     return NO;
 }
 
-- (void)streamError:(GRRequest *)request errorCode:(enum BRErrorCodes)errorCode
+- (void)streamError:(GRRequest *)request errorCode:(enum GRErrorCodes)errorCode
 {
     request.error = [[GRError alloc] init];
     request.error.errorCode = errorCode;

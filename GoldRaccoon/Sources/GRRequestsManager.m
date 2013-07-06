@@ -109,14 +109,14 @@
 
 #pragma mark - FTP Actions
 
-- (id<GRRequestProtocol>)addRequestForListDirectoryAtPath:(NSString *)filePath
+- (id<GRRequestProtocol>)addRequestForListDirectoryAtPath:(NSString *)path
 {
-    return [self _addRequestOfType:[GRListingRequest class] withPath:filePath];
+    return [self _addRequestOfType:[GRListingRequest class] withPath:path];
 }
 
-- (id<GRRequestProtocol>)addRequestForCreateDirectoryAtPath:(NSString *)filePath
+- (id<GRRequestProtocol>)addRequestForCreateDirectoryAtPath:(NSString *)path
 {
-    return [self _addRequestOfType:[GRCreateDirectoryRequest class] withPath:filePath];
+    return [self _addRequestOfType:[GRCreateDirectoryRequest class] withPath:path];
 }
 
 - (id<GRRequestProtocol>)addRequestForDeleteFileAtPath:(NSString *)filePath
@@ -124,9 +124,9 @@
     return [self _addRequestOfType:[GRDeleteRequest class] withPath:filePath];
 }
 
-- (id<GRRequestProtocol>)addRequestForDeleteDirectoryAtPath:(NSString *)filePath
+- (id<GRRequestProtocol>)addRequestForDeleteDirectoryAtPath:(NSString *)path
 {
-    return [self _addRequestOfType:[GRDeleteRequest class] withPath:filePath];
+    return [self _addRequestOfType:[GRDeleteRequest class] withPath:path];
 }
 
 - (id<GRDataExchangeRequestProtocol>)addRequestForDownloadFileAtRemotePath:(NSString *)remotePath toLocalPath:(NSString *)localPath
@@ -253,27 +253,13 @@
 
 - (long)dataSizeForUploadRequest:(id<GRDataExchangeRequestProtocol>)request
 {
-    // user returns the total size of data to send. Used ONLY to calculate percentComplete.
     return [_currentUploadData length];
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// description:	requestDataToSend is designed to hand off the BR the next block
-//              of data to upload to the FTP server. It continues to call this
-//              method for more data until nil is returned.
-//
-// important:   This is a required method for uploading data to an FTP server.
-//              If this method is missing, it you will get a runtime error indicating
-//              this method is missing.
-////////////////////////////////////////////////////////////////////////////////
 - (NSData *)dataForUploadRequest:(id<GRDataExchangeRequestProtocol>)request
 {
-    // returns data object or nil when complete
-    // basically, first time we return the pointer to the NSData.
-    // and BR will upload the data.
-    // Second time we return nil which means no more data to send
-    NSData *temp = _currentUploadData;       // this is a shallow copy of the pointer, not a deep copy
-    _currentUploadData = nil;                // next time around, return nil...
+    NSData *temp = _currentUploadData;
+    _currentUploadData = nil; // next time will return nil;
     return temp;
 }
 

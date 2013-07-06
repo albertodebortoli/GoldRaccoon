@@ -18,7 +18,7 @@
 
 @synthesize errorCode;
 
-+ (BRErrorCodes)errorCodeWithError:(NSError *)error
++ (GRErrorCodes)errorCodeWithError:(NSError *)error
 {
     // As suggested by RMaddy
     NSDictionary *userInfo = error.userInfo;

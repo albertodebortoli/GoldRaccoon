@@ -12,7 +12,7 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-typedef enum BRErrorCodes {
+typedef enum GRErrorCodes {
     //client errors
     kGRFTPClientHostnameIsNil = 901,
     kGRFTPClientCantOpenStream = 902,
@@ -36,13 +36,13 @@ typedef enum BRErrorCodes {
     kGRFTPServerStorageAllocationExceeded = 552,
     kGRFTPServerIllegalFileName = 553,
     kGRFTPServerUnknownError
-} BRErrorCodes;
+} GRErrorCodes;
 
 @interface GRError : NSObject
 
-@property (assign) BRErrorCodes errorCode;
+@property (assign) GRErrorCodes errorCode;
 @property (readonly) NSString *message;
 
-+ (BRErrorCodes)errorCodeWithError:(NSError *)error;
++ (GRErrorCodes)errorCodeWithError:(NSError *)error;
 
 @end
