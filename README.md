@@ -2,7 +2,7 @@
 
 ## General Notes
 
-GoldRaccoon is a iOS component that allow you to connect to a FTP service and do the following stuff:
+[GoldRaccoon](http://albertodebortoli.github.io/GoldRaccoon/) is a iOS component that allow you to connect to a FTP service and do the following stuff:
 
 *	Download a file
 *	Upload a file
@@ -29,6 +29,12 @@ Most of the code is therefore written by [Valentin Radu](https://github.com/vale
 - Added a demo project.
 
 ## Usage
+
+If you'd like to include this component as a pod using [CocoaPods](http://cocoapods.org/), just add the following line to your Podfile:
+
+`pod "GoldRaccoon"`
+
+otherwise
 
 - copy Sources folder into your project
 - add CFNetwork framewor
