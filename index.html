@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="GoldRaccoon : An iOS component that allow you to connect to a FTP service and perform the operations you need." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>GoldRaccoon</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/albertodebortoli/GoldRaccoon">View on GitHub</a>
+
+          <h1 id="project_title">GoldRaccoon</h1>
+          <h2 id="project_tagline">An iOS component that allow you to connect to a FTP service and perform the operations you need.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/albertodebortoli/GoldRaccoon/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/albertodebortoli/GoldRaccoon/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="general-notes" class="anchor" href="#general-notes"><span class="octicon octicon-link"></span></a>General Notes</h2>
+
+<p>GoldRaccoon is a iOS component that allow you to connect to a FTP service and do the following stuff:</p>
+
+<ul>
+<li>  Download a file</li>
+<li>  Upload a file</li>
+<li>  Delete a file</li>
+<li>  Create a directory</li>
+<li>  Delete a directory</li>
+<li>  List a directory</li>
+</ul><h2>
+<a name="why-another-raccoon" class="anchor" href="#why-another-raccoon"><span class="octicon octicon-link"></span></a>Why another Raccoon?</h2>
+
+<p>First, because the humanity needs for it.</p>
+
+<p>This project started on 29/06/2013 for the Objective-C Hackathon (<a href="http://objectivechackathon.appspot.com/">http://objectivechackathon.appspot.com/</a>).</p>
+
+<p><a href="https://github.com/albertodebortoli/GoldRaccoon">GoldRaccoon</a> aims to be an evolution of <a href="https://github.com/lloydsargent/BlackRaccoon">BlackRaccoon</a> (which is an evolution of <a href="https://github.com/valentinradu/WhiteRaccoon">WhiteRaccoon</a>), maybe the best (or at least one of the few) third-party component out there for handling FTP operations on iOS.</p>
+
+<p>I forked the public repo of BlackRaccooon in May 2013 and added some improvements that have been merge into master to BlackRaccoon. Even though BlackRaccoon does what it says, I prefer to clean it a little and use a different and more extensible code structure.</p>
+
+<p>Most of the code is therefore written by <a href="https://github.com/valentinradu">Valentin Radu</a> and <a href="https://github.com/lloydsargent">Lloyd Sargent</a>, the main extensions I (<a href="https://github.com/albertodebortoli">Alberto De Bortoli</a>) added are:</p>
+
+<ul>
+<li>Done some deep refactoring for the bloating of the previous code;</li>
+<li>Added missing (and reasonable) code conventions;</li>
+<li>Added GRRequestsManager to manage all the different kind of requests using a FIFO queue;</li>
+<li>Added a demo project.</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<ul>
+<li>copy Sources folder into your project</li>
+<li>add CFNetwork framewor</li>
+<li>import <code>GRRequestsManager.h</code> in your class</li>
+<li>add a property for the manager</li>
+</ul><div class="highlight"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">GRRequestsManager</span> <span class="o">*</span><span class="n">requestsManager</span><span class="p">;</span>
+</pre></div>
+
+<ul>
+<li>setup the manager somewhere (with hostname, username and password)</li>
+</ul><div class="highlight"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GRRequestsManager</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithHostname</span><span class="o">:&lt;</span><span class="n">hostname</span><span class="o">&gt;</span>
+                                                              <span class="nl">user:</span><span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span>
+                                                          <span class="nl">password:</span><span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">];</span>
+</pre></div>
+
+<ul>
+<li>optionally make your class conform to <code>GRRequestsManagerDelegate</code>, implement the delegate methods (basically success, failure and progress callbacks) and set your instance of this class as delegate for the manager</li>
+</ul><div class="highlight"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</pre></div>
+
+<ul>
+<li>add the requests to the manager using the following methods:</li>
+</ul><div class="highlight"><pre><span class="k">-</span> <span class="nf">addRequestForListDirectoryAtPath:</span>
+<span class="k">-</span> <span class="nf">addRequestForCreateDirectoryAtPath:</span>
+<span class="k">-</span> <span class="nf">addRequestForDeleteFileAtPath:</span>
+<span class="k">-</span> <span class="nf">addRequestForDeleteDirectoryAtPath:</span>
+<span class="k">-</span> <span class="nf">addRequestForDownloadFileAtRemotePath:toLocalPath:</span>
+<span class="k">-</span> <span class="nf">addRequestForUploadFileAtLocalPath:toRemotePath:</span>
+</pre></div>
+
+<ul>
+<li>start the manager</li>
+</ul><div class="highlight"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="n">startProcessingRequests</span><span class="p">];</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">GoldRaccoon maintained by <a href="https://github.com/albertodebortoli">albertodebortoli</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
