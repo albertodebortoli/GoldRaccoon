@@ -1,36 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="GoldRaccoon : An iOS component that allow you to connect to a FTP service and perform the operations you need." />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>GoldRaccoon by albertodebortoli</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>GoldRaccoon</title>
   </head>
-
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/albertodebortoli/GoldRaccoon">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/albertodebortoli/GoldRaccoon/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/albertodebortoli/GoldRaccoon/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/albertodebortoli/GoldRaccoon">View on GitHub</a>
+    <div class="wrapper">
 
-          <h1 id="project_title">GoldRaccoon</h1>
-          <h2 id="project_tagline">An iOS component that allow you to connect to a FTP service and perform the operations you need.</h2>
+      <section>
+        <div id="title">
+          <h1>GoldRaccoon</h1>
+          <p>An iOS component that allow you to connect to a FTP service and perform the operations you need.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/albertodebortoli">albertodebortoli</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/albertodebortoli/GoldRaccoon/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/albertodebortoli/GoldRaccoon/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
         <h2>
 <a name="general-notes" class="anchor" href="#general-notes"><span class="octicon octicon-link"></span></a>General Notes</h2>
 
@@ -92,12 +99,12 @@
 
 <ul>
 <li>add the requests to the manager using the following methods:</li>
-</ul><div class="highlight"><pre><span class="k">-</span> <span class="nf">addRequestForListDirectoryAtPath:</span>
-<span class="k">-</span> <span class="nf">addRequestForCreateDirectoryAtPath:</span>
-<span class="k">-</span> <span class="nf">addRequestForDeleteFileAtPath:</span>
-<span class="k">-</span> <span class="nf">addRequestForDeleteDirectoryAtPath:</span>
-<span class="k">-</span> <span class="nf">addRequestForDownloadFileAtRemotePath:toLocalPath:</span>
-<span class="k">-</span> <span class="nf">addRequestForUploadFileAtLocalPath:toRemotePath:</span>
+</ul><div class="highlight"><pre><span class="nl">addRequestForListDirectoryAtPath:</span>
+<span class="nl">addRequestForCreateDirectoryAtPath:</span>
+<span class="nl">addRequestForDeleteFileAtPath:</span>
+<span class="nl">addRequestForDeleteDirectoryAtPath:</span>
+<span class="nl">addRequestForDownloadFileAtRemotePath:</span><span class="n">toLocalPath</span><span class="o">:</span>
+<span class="nl">addRequestForUploadFileAtLocalPath:</span><span class="n">toRemotePath</span><span class="o">:</span>
 </pre></div>
 
 <ul>
@@ -105,17 +112,9 @@
 </ul><div class="highlight"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="n">startProcessingRequests</span><span class="p">];</span>
 </pre></div>
       </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">GoldRaccoon maintained by <a href="https://github.com/albertodebortoli">albertodebortoli</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
     </div>
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
-
   </body>
 </html>
