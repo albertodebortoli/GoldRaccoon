@@ -2,7 +2,7 @@
 
 ## General Notes
 
-[GoldRaccoon](http://albertodebortoli.github.io/GoldRaccoon/) is a iOS component that allow you to connect to a FTP service and do the following stuff:
+[GoldRaccoon](http://albertodebortoli.github.io/GoldRaccoon/) is a iOS component that allow you to connect to a FTP service and do the following:
 
 *	Download a file
 *	Upload a file
@@ -13,13 +13,13 @@
 
 ## Why another Raccoon? 
 
-First, because the humanity needs for it.
+First, because the humanity needs it.
 
 This project started on 29/06/2013 for the Objective-C Hackathon (http://objectivechackathon.appspot.com/).
 
 [GoldRaccoon](https://github.com/albertodebortoli/GoldRaccoon) aims to be an evolution of [BlackRaccoon](https://github.com/lloydsargent/BlackRaccoon) (which is an evolution of [WhiteRaccoon](https://github.com/valentinradu/WhiteRaccoon)), maybe the best (or at least one of the few) third-party component out there for handling FTP operations on iOS.
 
-I forked the public repo of BlackRaccooon in May 2013 and added some improvements that have been merge into master to BlackRaccoon. Even though BlackRaccoon does what it says, I prefer to clean it a little and use a different and more extensible code structure.
+I forked the public repo of BlackRaccooon in May 2013 and added some improvements that have been merged into master to BlackRaccoon. Even though BlackRaccoon does what it says, I prefer to clean it a little and use a different and more extensible code structure.
 
 Most of the code is therefore written by [Valentin Radu](https://github.com/valentinradu) and [Lloyd Sargent](https://github.com/lloydsargent), the main extensions I ([Alberto De Bortoli](https://github.com/albertodebortoli)) added are:
 
@@ -62,12 +62,12 @@ self.requestsManager.delegate = self;
 - add the requests to the manager using the following methods:
 
 ``` objective-c
-- addRequestForListDirectoryAtPath:
-- addRequestForCreateDirectoryAtPath:
-- addRequestForDeleteFileAtPath:
-- addRequestForDeleteDirectoryAtPath:
-- addRequestForDownloadFileAtRemotePath:toLocalPath:
-- addRequestForUploadFileAtLocalPath:toRemotePath:
+addRequestForListDirectoryAtPath:
+addRequestForCreateDirectoryAtPath:
+addRequestForDeleteFileAtPath:
+addRequestForDeleteDirectoryAtPath:
+addRequestForDownloadFileAtRemotePath:toLocalPath:
+addRequestForUploadFileAtLocalPath:toRemotePath:
 ```
 
 - start the manager
