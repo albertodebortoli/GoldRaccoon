@@ -37,7 +37,7 @@ If you'd like to include this component as a pod using [CocoaPods](http://cocoap
 otherwise
 
 - copy Sources folder into your project
-- add CFNetwork framewor
+- add CFNetwork framework
 - import `GRRequestsManager.h` in your class
 - add a property for the manager
 
