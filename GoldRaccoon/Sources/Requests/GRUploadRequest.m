@@ -1,7 +1,7 @@
 //
 //  GRUploadRequest.m
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Valentin Radu on 8/23/11.
 //  Copyright 2011 Valentin Radu. All rights reserved.
@@ -64,7 +64,7 @@
 
 - (void)requestCompleted:(GRRequest *)request
 {
-    NSString * fileName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
+    NSString *fileName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
     
     if ([self.listingRequest fileExists:fileName]) {
         if ([self.delegate shouldOverwriteFile:self.path forRequest:self] == NO) {
@@ -82,7 +82,6 @@
     // if things fail. This encapsulates the streamInfo object and cleans up our code.
     [self.streamInfo openWrite:self];
 }
-
 
 - (void)requestFailed:(GRRequest *)request
 {
@@ -162,7 +161,7 @@
             
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
-            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
             NSLog(@"%@", self.error.message);
         }
         break;
@@ -181,7 +180,7 @@
 
 - (NSString *)fullRemotePath
 {
-    return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];
+    return [[self fullURL] absoluteString];
 }
 
 @end

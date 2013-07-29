@@ -1,7 +1,7 @@
 //
 //  GRDeleteRequest.m
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Valentin Radu on 8/23/11.
 //  Copyright 2011 Valentin Radu. All rights reserved.
@@ -26,7 +26,7 @@
         return [super path];
     }
     
-    NSString * directoryPath = [super path];
+    NSString *directoryPath = [super path];
     if (![directoryPath isEqualToString:@""]) {
         directoryPath = [directoryPath stringByAppendingString:@"/"];
     }

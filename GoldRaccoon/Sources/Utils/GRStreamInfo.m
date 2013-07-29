@@ -61,8 +61,7 @@ dispatch_queue_t dispatch_get_local_queue()
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource passwordForRequest:request]);
     readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
     
-    if (readStream==nil)
-    {
+    if (readStream == nil) {
         NSLog(@"Can't open the read stream! Possibly wrong URL");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
@@ -124,7 +123,7 @@ dispatch_queue_t dispatch_get_local_queue()
     
     request.didOpenStream = NO;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
-        if (!request.didOpenStream && request.error==nil) {
+        if (!request.didOpenStream && (request.error == nil)) {
             NSLog(@"No response from the server. Timeout.");
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
@@ -159,12 +158,12 @@ dispatch_queue_t dispatch_get_local_queue()
     NSData *data;
     NSMutableData *bufferObject = [NSMutableData dataWithLength:kGRDefaultBufferSize];
 
-    bytesThisIteration = [readStream read: (UInt8 *) [bufferObject bytes] maxLength:kGRDefaultBufferSize];
+    bytesThisIteration = [readStream read:(UInt8 *)[bufferObject bytes] maxLength:kGRDefaultBufferSize];
     bytesTotal += bytesThisIteration;
     
     // return the data
     if (bytesThisIteration > 0) {
-        data = [NSData dataWithBytes: (UInt8 *) [bufferObject bytes] length: bytesThisIteration];
+        data = [NSData dataWithBytes:(UInt8 *)[bufferObject bytes] length:bytesThisIteration];
         request.percentCompleted = bytesTotal / request.maximumSize;
         
         if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
@@ -187,7 +186,7 @@ dispatch_queue_t dispatch_get_local_queue()
 
 - (BOOL)write:(GRRequest *)request data:(NSData *)data
 {
-    bytesThisIteration = [writeStream write: [data bytes] maxLength: [data length]];
+    bytesThisIteration = [writeStream write:[data bytes] maxLength:[data length]];
     bytesTotal += bytesThisIteration;
             
     if (bytesThisIteration > 0) {

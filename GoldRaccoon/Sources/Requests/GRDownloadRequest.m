@@ -1,7 +1,7 @@
 //
 //  GRDownloadRequest.m
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Valentin Radu on 8/23/11.
 //  Copyright 2011 Valentin Radu. All rights reserved.
@@ -87,7 +87,7 @@
         break;
             
         case NSStreamEventErrorOccurred: {
-            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
             NSLog(@"%@", self.error.message);
         }
         break;
@@ -104,7 +104,7 @@
 
 - (NSString *)fullRemotePath
 {
-    return [[self.dataSource hostnameForRequest:self] stringByAppendingPathComponent:self.path];
+    return [[self fullURL] absoluteString];
 }
 
 @end

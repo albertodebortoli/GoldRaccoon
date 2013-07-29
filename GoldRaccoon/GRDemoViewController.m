@@ -37,21 +37,21 @@
 - (IBAction)createDirectoryButton:(id)sender
 {
     [self _setupManager];
-    [self.requestsManager addRequestForCreateDirectoryAtPath:@"/dir/"];
+    [self.requestsManager addRequestForCreateDirectoryAtPath:@"dir/"];
     [self.requestsManager startProcessingRequests];
 }
 
 - (IBAction)deleteDirectoryButton:(id)sender
 {
     [self _setupManager];
-    [self.requestsManager addRequestForDeleteDirectoryAtPath:@"/dir/"];
+    [self.requestsManager addRequestForDeleteDirectoryAtPath:@"dir/"];
     [self.requestsManager startProcessingRequests];
 }
 
 - (IBAction)deleteFileButton:(id)sender
 {
     [self _setupManager];
-    [self.requestsManager addRequestForDeleteFileAtPath:@"/dir/file.txt"];
+    [self.requestsManager addRequestForDeleteFileAtPath:@"dir/file.txt"];
     [self.requestsManager startProcessingRequests];
 }
 
@@ -59,17 +59,17 @@
 {
     [self _setupManager];
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TestFile" ofType:@"txt"];
-    [self.requestsManager addRequestForUploadFileAtLocalPath:bundlePath toRemotePath:@"/dir/file.txt"];
+    [self.requestsManager addRequestForUploadFileAtLocalPath:bundlePath toRemotePath:@"dir/file.txt"];
     [self.requestsManager startProcessingRequests];
 }
 
 - (IBAction)downloadFileButton:(id)sender
 {
     [self _setupManager];
-    NSString* documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     NSString *localFilePath = [documentsDirectoryPath stringByAppendingPathComponent:@"DownloadedFile.txt"];
 
-    [self.requestsManager addRequestForDownloadFileAtRemotePath:@"/dir/file.txt" toLocalPath:localFilePath];
+    [self.requestsManager addRequestForDownloadFileAtRemotePath:@"dir/file.txt" toLocalPath:localFilePath];
     [self.requestsManager startProcessingRequests];
 }
 

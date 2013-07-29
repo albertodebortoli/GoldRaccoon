@@ -1,7 +1,7 @@
 //
 //  GRRequest.m
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Valentin Radu on 8/23/11.
 //  Copyright 2011 Valentin Radu. All rights reserved.
@@ -57,7 +57,8 @@
     if (hostname.length >= 6 && [[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
         hostname = [hostname substringFromIndex:6];
     }
-    NSString *fullURLString = [NSString stringWithFormat:@"%@%@%@", ftpPrefix, hostname, self.path];
+    NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
+    NSString *fullURLString = [NSString stringWithFormat:@"%@%@/%@", ftpPrefix, hostname, path];
     return [NSURL URLWithString:fullURLString];
     
 }
@@ -86,8 +87,8 @@
     if (hostname.length >= 6 && [[hostname substringToIndex:6] isEqualToString:ftpPrefix]) {
         hostname = [hostname substringFromIndex:6];
     }
-    
-    NSString *fullURLString = [NSString stringWithFormat:@"ftp://%@%@%@", cred, hostname, self.path];
+    NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
+    NSString *fullURLString = [NSString stringWithFormat:@"%@%@%@/%@", ftpPrefix, cred, hostname, path];
     return [NSURL URLWithString:fullURLString];
 }
 
@@ -95,7 +96,7 @@
 {
     // we remove all the extra slashes from the directory path, including the last one (if there is one)
     // we also escape it
-    NSString * escapedPath = [_path stringByStandardizingPath];
+    NSString *escapedPath = [_path stringByStandardizingPath];
     
     // we need the path to be absolute, if it's not, we *make* it
     if ([escapedPath isAbsolutePath] == NO) {

@@ -1,7 +1,7 @@
 //
 //  GRListingRequest.m
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Valentin Radu on 8/23/11.
 //  Copyright 2011 Valentin Radu. All rights reserved.
@@ -31,7 +31,7 @@
     NSString *fileName = [[fileNamePath lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
     
     for (NSDictionary *file in self.filesInfo) {
-        NSString * name = [file objectForKey:(id)kCFFTPResourceName];
+        NSString *name = [file objectForKey:(id)kCFFTPResourceName];
         if ([fileName isEqualToString:name]) {
             return YES;
         }
@@ -43,7 +43,7 @@
 - (NSString *)path
 {
     // the path will always point to a directory, so we add the final slash to it (if there was one before escaping/standardizing, it's *gone* now)
-    NSString * directoryPath = [super path];
+    NSString *directoryPath = [super path];
     if (![directoryPath hasSuffix: @"/"]) {
         directoryPath = [directoryPath stringByAppendingString:@"/"];
     }
@@ -89,7 +89,7 @@
         break;
             
         case NSStreamEventErrorOccurred: {
-            [self.streamInfo streamError:self errorCode: [GRError errorCodeWithError: [theStream streamError]]];
+            [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
             NSLog(@"%@", self.error.message);
         }
         break;
@@ -113,12 +113,12 @@
                         // July 10, 2012: CFFTPCreateParsedResourceListing had a bug that had the date over retained
                         // in order to fix this, we release it once. However, just as a precaution, we check to see what
                         // the retain count might be (this isn't guaranteed to work).
-                        id date = [(__bridge NSDictionary *) listingEntity objectForKey: (id) kCFFTPResourceModDate];
+                        id date = [(__bridge NSDictionary *)listingEntity objectForKey:(id)kCFFTPResourceModDate];
                         if (CFGetRetainCount((__bridge CFTypeRef) date) >= 2)
                             CFRelease((__bridge CFTypeRef) date);
                         
                         // transfer the directory into an ARC maintained array
-                        self.filesInfo = [self.filesInfo arrayByAddingObject: (__bridge_transfer NSDictionary *) listingEntity];
+                        self.filesInfo = [self.filesInfo arrayByAddingObject:(__bridge_transfer NSDictionary *)listingEntity];
                     }
                     offset += parsedBytes;
                 }

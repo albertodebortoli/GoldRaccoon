@@ -1,7 +1,7 @@
 //
 //  GRRequestsManagerProtocol.h
 //  GoldRaccoon
-//  v1.0.0
+//  v1.0.1
 //
 //  Created by Alberto De Bortoli on 17/06/2013.
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
@@ -153,6 +153,7 @@
 
 /**
  @brief Ask the manager to cancel a specific pending request.
+ @param request The request to cancel.
  @return YES if the operation succeeded, NO otherwise.
  */
 - (BOOL)cancelRequest:(id<GRRequestProtocol>)request;
