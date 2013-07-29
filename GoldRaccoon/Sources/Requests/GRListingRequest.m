@@ -113,8 +113,8 @@
             
             [self.streamInfo streamComplete:self];
         }
-            break;
-            
+        break;
+        
         default:
             break;
     }

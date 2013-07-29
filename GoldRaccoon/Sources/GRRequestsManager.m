@@ -149,7 +149,7 @@
         for (NSDictionary *file in ((GRListingRequest *)request).filesInfo) {
             [listing addObject:[file objectForKey:(id)kCFFTPResourceName]];
         }
-        if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteListingRequest:listing:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteListingRequest:listing:)]) {
             [self.delegate requestsManager:self
                  didCompleteListingRequest:((GRListingRequest *)request)
                                    listing:listing];
@@ -158,21 +158,21 @@
     
     // create directory request
     if ([request isKindOfClass:[GRCreateDirectoryRequest class]]) {
-        if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteCreateDirectoryRequest:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteCreateDirectoryRequest:)]) {
             [self.delegate requestsManager:self didCompleteCreateDirectoryRequest:(GRUploadRequest *)request];
         }
     }
 
     // delete request
     if ([request isKindOfClass:[GRDeleteRequest class]]) {
-        if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteDeleteRequest:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteDeleteRequest:)]) {
             [self.delegate requestsManager:self didCompleteDeleteRequest:(GRUploadRequest *)request];
         }
     }
 
     // upload request
     if ([request isKindOfClass:[GRUploadRequest class]]) {
-        if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteUploadRequest:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteUploadRequest:)]) {
             [self.delegate requestsManager:self didCompleteUploadRequest:(GRUploadRequest *)request];
         }
         _currentUploadData = nil;
@@ -186,12 +186,12 @@
                                                                 error:&writeError];
         
         if (writeToFileSucceeded && !writeError) {
-            if ([_delegate respondsToSelector:@selector(requestsManager:didCompleteDownloadRequest:)]) {
+            if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteDownloadRequest:)]) {
                 [self.delegate requestsManager:self didCompleteDownloadRequest:(GRDownloadRequest *)request];
             }
         }
         else {
-            if ([_delegate respondsToSelector:@selector(requestsManager:didFailWritingFileAtPath:forRequest:error:)]) {
+            if ([self.delegate respondsToSelector:@selector(requestsManager:didFailWritingFileAtPath:forRequest:error:)]) {
                 [self.delegate requestsManager:self
                       didFailWritingFileAtPath:((GRDownloadRequest *)request).localFilePath
                                     forRequest:(GRDownloadRequest *)request
@@ -206,7 +206,7 @@
 
 - (void)requestFailed:(GRRequest *)request
 {
-    if ([_delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)]) {
+    if ([self.delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)]) {
         NSError *error = [NSError errorWithDomain:@"com.github.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
         [self.delegate requestsManager:self didFailRequest:request withError:error];
     }
