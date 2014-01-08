@@ -43,7 +43,6 @@ dispatch_queue_t dispatch_get_local_queue()
 - (void)openRead:(GRRequest *)request
 {
     if ([request.dataSource hostnameForRequest:request] == nil) {
-        NSLog(@"The host name is nil!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
@@ -62,7 +61,6 @@ dispatch_queue_t dispatch_get_local_queue()
     readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
     
     if (readStream == nil) {
-        NSLog(@"Can't open the read stream! Possibly wrong URL");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
@@ -78,7 +76,6 @@ dispatch_queue_t dispatch_get_local_queue()
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
         if (!request.didOpenStream && request.error == nil)
         {
-            NSLog(@"No response from the server. Timeout.");
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed: request];
@@ -90,7 +87,6 @@ dispatch_queue_t dispatch_get_local_queue()
 - (void)openWrite:(GRRequest *)request
 {
     if ([request.dataSource hostnameForRequest:request] == nil) {
-        NSLog(@"The host name is nil!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
         [request.delegate requestFailed: request];
@@ -109,7 +105,6 @@ dispatch_queue_t dispatch_get_local_queue()
     writeStream = ( __bridge_transfer NSOutputStream *) writeStreamRef;
     
     if (writeStream == nil) {
-        NSLog(@"Can't open the write stream! Possibly wrong URL!");
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
         [request.delegate requestFailed: request];
@@ -124,7 +119,6 @@ dispatch_queue_t dispatch_get_local_queue()
     request.didOpenStream = NO;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
         if (!request.didOpenStream && (request.error == nil)) {
-            NSLog(@"No response from the server. Timeout.");
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed:request];
@@ -179,7 +173,6 @@ dispatch_queue_t dispatch_get_local_queue()
     }
     // otherwise we had an error, return an error
     [self streamError: request errorCode:kGRFTPClientCantReadStream];
-    NSLog(@"%@", request.error.message);
     
     return nil;
 }
@@ -203,7 +196,6 @@ dispatch_queue_t dispatch_get_local_queue()
     }
     
     [self streamError: request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
-    NSLog(@"%@", request.error.message);
 
     return NO;
 }

@@ -77,7 +77,6 @@
                 [self.receivedData appendData: data];
             }
             else {
-                NSLog(@"Stream opened, but failed while trying to read from it.");
                 [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         }
@@ -90,7 +89,6 @@
             
         case NSStreamEventErrorOccurred: {
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
-            NSLog(@"%@", self.error.message);
         }
         break;
             

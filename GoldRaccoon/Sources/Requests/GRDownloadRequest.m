@@ -41,7 +41,6 @@
 {
     if ([self.delegate respondsToSelector:@selector(dataAvailable:forRequest:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
-        NSLog(@"%@", self.error.message);
         return;
     }
     
@@ -75,7 +74,6 @@
                 }
             }
             else {
-                NSLog(@"Stream opened, but failed while trying to read from it.");
                 [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         } 
@@ -88,7 +86,6 @@
             
         case NSStreamEventErrorOccurred: {
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
-            NSLog(@"%@", self.error.message);
         }
         break;
             

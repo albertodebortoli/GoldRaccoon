@@ -49,7 +49,6 @@
     
     if ([self.dataSource respondsToSelector:@selector(dataForUploadRequest:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
-        NSLog(@"%@", self.error.message);
         return;
     }
     
@@ -162,14 +161,12 @@
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
-            NSLog(@"%@", self.error.message);
         }
         break;
             
         case NSStreamEventEndEncountered: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:kGRFTPServerAbortedTransfer];
-            NSLog(@"%@", self.error.message);
         }
         break;
         

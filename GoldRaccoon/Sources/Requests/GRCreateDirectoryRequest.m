@@ -40,7 +40,6 @@
 - (void)start
 {
     if ([self hostnameForRequest:self] == nil) {
-        NSLog(@"The host name is nil!");
         self.error = [[GRError alloc] init];
         self.error.errorCode = kGRFTPClientHostnameIsNil;
         [self.delegate requestFailed:self];
@@ -60,7 +59,6 @@
     NSString *directoryName = [[self.path lastPathComponent] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
 
     if ([self.listrequest fileExists:directoryName]) {
-        NSLog(@"Unfortunately, at this point, the library doesn't support directory overwriting.");
         [self.streamInfo streamError:self errorCode:kGRFTPClientCantOverwriteDirectory];
     }
     else {
@@ -123,7 +121,6 @@
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
-            NSLog(@"%@", self.error.message);
         }
             break;
             
