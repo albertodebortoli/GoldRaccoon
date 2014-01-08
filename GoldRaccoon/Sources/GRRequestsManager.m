@@ -48,7 +48,7 @@
 
 - (instancetype)init
 {
-    NSAssert(NO, @"Initializer not allowed. Use designated initializer initWithHostname:username:password:");
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
