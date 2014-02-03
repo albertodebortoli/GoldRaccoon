@@ -17,25 +17,14 @@
 
 @interface GRDownloadRequest ()
 
-@property NSData *receivedData;
+@property (nonatomic, strong) NSData *receivedData;
 
 @end
 
 @implementation GRDownloadRequest
 
-@synthesize passiveMode;
-@synthesize uuid;
-@synthesize error;
-@synthesize streamInfo;
-@synthesize maximumSize;
-@synthesize percentCompleted;
-@synthesize delegate;
-@synthesize didOpenStream;
-@synthesize path;
-
-@synthesize receivedData;
-@synthesize localFilePath;
-@synthesize fullRemotePath;
+@synthesize localFilePath = _localFilePath;
+@synthesize fullRemotePath = _fullRemotePath;
 
 - (void)start
 {

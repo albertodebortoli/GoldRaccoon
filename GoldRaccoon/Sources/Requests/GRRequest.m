@@ -17,33 +17,26 @@
 
 @implementation GRRequest
 
-@synthesize passiveMode;
-@synthesize uuid;
-@synthesize error;
-@synthesize streamInfo;
-@synthesize maximumSize;
-@synthesize percentCompleted;
-@synthesize delegate;
-@synthesize didOpenStream;
+@synthesize passiveMode = _passiveMode;
+@synthesize uuid = _uuid;
+@synthesize error = _error;
+@synthesize streamInfo = _streamInfo;
+@synthesize maximumSize = _maximumSize;
+@synthesize percentCompleted = _percentCompleted;
+@synthesize delegate = _delegate;
+@synthesize didOpenStream = _didOpenStream;
 @synthesize path = _path;
 
 - (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource
 {
     self = [super init];
     if (self) {
-		self.passiveMode = YES;
-        self.uuid        = [[NSUUID UUID] UUIDString];
-        self.path        = nil;
-        
-        self.streamInfo = [[GRStreamInfo alloc] init];
-        self.streamInfo.readStream = nil;
-        self.streamInfo.writeStream = nil;
-        self.streamInfo.bytesThisIteration = 0;
-        self.streamInfo.bytesTotal = 0;
-        self.streamInfo.timeout = 30;
-        
-        self.delegate   = aDelegate;
-        self.dataSource = aDatasource;
+		_passiveMode = YES;
+        _uuid = [[NSUUID UUID] UUIDString];
+        _path = nil;
+        _streamInfo = [[GRStreamInfo alloc] init];
+        _delegate = aDelegate;
+        _dataSource = aDatasource;
     }
     return self;
 }
@@ -60,7 +53,6 @@
     NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
     NSString *fullURLString = [NSString stringWithFormat:@"%@%@/%@", ftpPrefix, hostname, path];
     return [NSURL URLWithString:fullURLString];
-    
 }
 
 - (NSURL *)fullURLWithEscape
@@ -152,7 +144,7 @@
 
 - (void)cancelRequest
 {
-    self.streamInfo.cancelRequestFlag = TRUE;
+    self.streamInfo.cancelRequestFlag = YES;
 }
 
 - (BOOL)cancelDoesNotCallDelegate

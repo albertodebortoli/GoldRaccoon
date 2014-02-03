@@ -21,8 +21,12 @@
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
+@property (nonatomic, strong) NSMutableData *currentDownloadData;
+@property (nonatomic, strong) NSData *currentUploadData;
 @property (nonatomic, strong) GRQueue *requestQueue;
 @property (nonatomic, strong) GRRequest *currentRequest;
+@property (nonatomic, assign) BOOL delegateRespondsToPercentProgress;
+@property (nonatomic, assign) BOOL isRunning;
 
 - (id<GRRequestProtocol>)_addRequestOfType:(Class)clazz withPath:(NSString *)filePath;
 - (id<GRDataExchangeRequestProtocol>)_addDataExchangeRequestOfType:(Class)clazz withLocalPath:(NSString *)localPath remotePath:(NSString *)remotePath;
@@ -32,14 +36,6 @@
 @end
 
 @implementation GRRequestsManager
-{
-    NSMutableData *_currentDownloadData;
-    NSData *_currentUploadData;
-    BOOL _isRunning;
-    
-@private
-    BOOL _delegateRespondsToPercentProgress;
-}
 
 @synthesize hostname = _hostname;
 @synthesize delegate = _delegate;
@@ -96,7 +92,7 @@
 - (void)stopAndCancelAllRequests
 {
     [self.requestQueue clear];
-    self.currentRequest.cancelDoesNotCallDelegate = TRUE;
+    self.currentRequest.cancelDoesNotCallDelegate = YES;
     [self.currentRequest cancelRequest];
     self.currentRequest = nil;
     _isRunning = NO;
@@ -207,7 +203,7 @@
 - (void)requestFailed:(GRRequest *)request
 {
     if ([self.delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)]) {
-        NSError *error = [NSError errorWithDomain:@"com.github.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
+        NSError *error = [NSError errorWithDomain:@"com.albertodebortoli.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
         [self.delegate requestsManager:self didFailRequest:request withError:error];
     }
     
@@ -310,8 +306,8 @@
         [self.currentRequest start];
     });
     
-    if ([self.delegate respondsToSelector:@selector(requestsManager:didStartRequest:)]) {
-        [self.delegate requestsManager:self didStartRequest:self.currentRequest];
+    if ([self.delegate respondsToSelector:@selector(requestsManager:didScheduleRequest:)]) {
+        [self.delegate requestsManager:self didScheduleRequest:self.currentRequest];
     }
 }
 

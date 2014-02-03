@@ -27,25 +27,14 @@
 
 @implementation GRUploadRequest
 
-@synthesize passiveMode;
-@synthesize uuid;
-@synthesize error;
-@synthesize streamInfo;
-@synthesize maximumSize;
-@synthesize percentCompleted;
-@synthesize delegate;
-@synthesize didOpenStream;
-@synthesize path;
-
-@synthesize listingRequest;
-@synthesize localFilePath;
-@synthesize fullRemotePath;
+@synthesize localFilePath = _localFilePath;
+@synthesize fullRemotePath = _fullRemotePath;
 
 - (void)start
 {
     self.maximumSize = LONG_MAX;
-    _bytesIndex = 0;
-    _bytesRemaining = 0;
+    self.bytesIndex = 0;
+    self.bytesRemaining = 0;
     
     if ([self.dataSource respondsToSelector:@selector(dataForUploadRequest:)] == NO) {
         [self.streamInfo streamError:self errorCode:kGRFTPClientMissingRequestDataAvailable];
@@ -122,53 +111,52 @@
         case NSStreamEventOpenCompleted: {
             self.didOpenStream = YES;
             self.streamInfo.bytesTotal = 0;
-        } 
-        break;
+            break;
+        }
             
-        case NSStreamEventHasBytesAvailable: {
-        } 
+        case NSStreamEventHasBytesAvailable:
         break;
             
         case NSStreamEventHasSpaceAvailable: {
-            if (_bytesRemaining == 0) {
+            if (self.bytesRemaining == 0) {
                 if ([self.dataSource respondsToSelector:@selector(dataForUploadRequest:)]) {
-                    _sentData = [self.dataSource dataForUploadRequest:self];
+                    self.sentData = [self.dataSource dataForUploadRequest:self];
                 }
                 else {
                     return;
                 }
-                _bytesRemaining = [_sentData length];
-                _bytesIndex = 0;
+                self.bytesRemaining = [_sentData length];
+                self.bytesIndex = 0;
                 
                 // we are done
-                if (_sentData == nil) {
+                if (self.sentData == nil) {
                     [self.streamInfo streamComplete:self]; // perform callbacks and close out streams
                     return;
                 }
             }
             
-            NSUInteger nextPackageLength = MIN(kGRDefaultBufferSize, _bytesRemaining);
-            NSRange range = NSMakeRange(_bytesIndex, nextPackageLength);
-            NSData *packetToSend = [_sentData subdataWithRange: range];
+            NSUInteger nextPackageLength = MIN(kGRDefaultBufferSize, self.bytesRemaining);
+            NSRange range = NSMakeRange(self.bytesIndex, nextPackageLength);
+            NSData *packetToSend = [self.sentData subdataWithRange: range];
 
             [self.streamInfo write:self data: packetToSend];
             
-            _bytesIndex += self.streamInfo.bytesThisIteration;
-            _bytesRemaining -= self.streamInfo.bytesThisIteration;
+            self.bytesIndex += self.streamInfo.bytesThisIteration;
+            self.bytesRemaining -= self.streamInfo.bytesThisIteration;
+            break;
         }
-        break;
             
         case NSStreamEventErrorOccurred: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
+            break;
         }
-        break;
             
         case NSStreamEventEndEncountered: {
             // perform callbacks and close out streams
             [self.streamInfo streamError:self errorCode:kGRFTPServerAbortedTransfer];
+            break;
         }
-        break;
         
         default:
             break;

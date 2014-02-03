@@ -20,11 +20,11 @@
 @optional
 
 /**
- @brief Called to notify the delegate that a given request started.
+ @brief Called to notify the delegate that a given request has been scheduled.
  @param requestsManager The requests manager.
  @param request The request.
  */
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didStartRequest:(id<GRRequestProtocol>)request;
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didScheduleRequest:(id<GRRequestProtocol>)request;
 
 /**
  @brief Called to notify the delegate that a given listing request completed.

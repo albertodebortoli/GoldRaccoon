@@ -21,10 +21,10 @@
 
 @protocol GRRequestProtocol <NSObject>
 
-@property BOOL passiveMode;
-@property NSString *uuid;
+@property (nonatomic, assign) BOOL passiveMode;
+@property (nonatomic, copy) NSString *uuid;
 
-@property (nonatomic) NSString *path;
+@property (nonatomic, copy) NSString *path;
 @property (nonatomic, strong) GRError *error;
 @property (nonatomic, strong) GRStreamInfo *streamInfo;
 

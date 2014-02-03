@@ -16,28 +16,25 @@
 #import "GRRequest.h"
 
 @implementation GRStreamInfo
-
-@synthesize writeStream;    
-@synthesize readStream;
-@synthesize bytesThisIteration;
-@synthesize bytesTotal;
-@synthesize timeout;
-@synthesize cancelRequestFlag;
-@synthesize cancelDoesNotCallDelegate;
-
-/**
- @brief dispatch_get_local_queue() is designed to get our local queue, if it exists, or create one if it doesn't exist.
- @return queue of type dispatch_queue_t
- */
-dispatch_queue_t dispatch_get_local_queue()
 {
-    static dispatch_queue_t _queue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _queue = dispatch_queue_create("com.github.goldraccoon", 0);
-        dispatch_queue_set_specific(_queue, "com.github.goldraccoon", (void *) "com.github.goldraccoon", NULL);
-    });
-    return _queue;
+    dispatch_queue_t _queue;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _writeStream = nil;
+        _readStream = nil;
+        _bytesThisIteration = 0;
+        _bytesTotal = 0;
+        _timeout = 30;
+        _cancelRequestFlag = NO;
+        _cancelDoesNotCallDelegate = NO;
+        _queue = dispatch_queue_create("com.albertodebortoli.goldraccoon.streaminfo", DISPATCH_QUEUE_CONCURRENT);
+    }
+    
+    return self;
 }
 
 - (void)openRead:(GRRequest *)request
@@ -45,8 +42,8 @@ dispatch_queue_t dispatch_get_local_queue()
     if ([request.dataSource hostnameForRequest:request] == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
-        [request.delegate requestFailed: request];
-        [request.streamInfo close: request];
+        [request.delegate requestFailed:request];
+        [request.streamInfo close:request];
         return;
     }
     
@@ -58,28 +55,27 @@ dispatch_queue_t dispatch_get_local_queue()
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPFetchResourceInfo, kCFBooleanTrue);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource usernameForRequest:request]);
     CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource passwordForRequest:request]);
-    readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
+    self.readStream = ( __bridge_transfer NSInputStream *) readStreamRef;
     
-    if (readStream == nil) {
+    if (self.readStream == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
-        [request.delegate requestFailed: request];
-        [request.streamInfo close: request];
+        [request.delegate requestFailed:request];
+        [request.streamInfo close:request];
         return;
     }
     
-    readStream.delegate = request;
-	[readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[readStream open];
+    self.readStream.delegate = request;
+	[self.readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	[self.readStream open];
     
     request.didOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
-        if (!request.didOpenStream && request.error == nil)
-        {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, self.timeout * NSEC_PER_SEC), _queue, ^{
+        if (!request.didOpenStream && request.error == nil) {
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
-            [request.delegate requestFailed: request];
-            [request.streamInfo close: request];
+            [request.delegate requestFailed:request];
+            [request.streamInfo close:request];
         }
     });
 }
@@ -89,8 +85,8 @@ dispatch_queue_t dispatch_get_local_queue()
     if ([request.dataSource hostnameForRequest:request] == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
-        [request.delegate requestFailed: request];
-        [request.streamInfo close: request];
+        [request.delegate requestFailed:request];
+        [request.streamInfo close:request];
         return;
     }
     
@@ -102,47 +98,43 @@ dispatch_queue_t dispatch_get_local_queue()
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPUserName, (__bridge CFStringRef) [request.dataSource usernameForRequest:request]);
     CFWriteStreamSetProperty(writeStreamRef, kCFStreamPropertyFTPPassword, (__bridge CFStringRef) [request.dataSource passwordForRequest:request]);
     
-    writeStream = ( __bridge_transfer NSOutputStream *) writeStreamRef;
+    self.writeStream = ( __bridge_transfer NSOutputStream *) writeStreamRef;
     
-    if (writeStream == nil) {
+    if (!self.writeStream) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
-        [request.delegate requestFailed: request];
-        [request.streamInfo close: request];
+        [request.delegate requestFailed:request];
+        [request.streamInfo close:request];
         return;
     }
     
-    writeStream.delegate = request;
-    [writeStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [writeStream open];
+    self.writeStream.delegate = request;
+    [self.writeStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.writeStream open];
     
     request.didOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC), dispatch_get_local_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, self.timeout * NSEC_PER_SEC), _queue, ^{
         if (!request.didOpenStream && (request.error == nil)) {
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
             [request.delegate requestFailed:request];
-            [request.streamInfo close: request];
+            [request.streamInfo close:request];
         }
     });
 }
 
 - (BOOL)checkCancelRequest:(GRRequest *)request
 {
-    if (!cancelRequestFlag) {
+    if (!self.cancelRequestFlag) {
         return NO;
     }
     
     // see if we don't want to call the delegate (set and forget)
-    if (cancelDoesNotCallDelegate == YES) {
-        [request.streamInfo close: request];
+    if (!self.cancelDoesNotCallDelegate) {
+        [request.delegate requestCompleted:request];
     }
     
-    // otherwise indicate that the request to cancel was completed
-    else {
-        [request.delegate requestCompleted: request];
-        [request.streamInfo close: request];
-    }
+    [request.streamInfo close:request];
     
     return YES;
 }
@@ -152,13 +144,13 @@ dispatch_queue_t dispatch_get_local_queue()
     NSData *data;
     NSMutableData *bufferObject = [NSMutableData dataWithLength:kGRDefaultBufferSize];
 
-    bytesThisIteration = [readStream read:(UInt8 *)[bufferObject bytes] maxLength:kGRDefaultBufferSize];
-    bytesTotal += bytesThisIteration;
+    self.bytesThisIteration = [self.readStream read:(UInt8 *)[bufferObject bytes] maxLength:kGRDefaultBufferSize];
+    self.bytesTotal += self.bytesThisIteration;
     
     // return the data
-    if (bytesThisIteration > 0) {
-        data = [NSData dataWithBytes:(UInt8 *)[bufferObject bytes] length:bytesThisIteration];
-        request.percentCompleted = bytesTotal / request.maximumSize;
+    if (self.bytesThisIteration > 0) {
+        data = [NSData dataWithBytes:(UInt8 *)[bufferObject bytes] length:self.bytesThisIteration];
+        request.percentCompleted = self.bytesTotal / request.maximumSize;
         
         if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
             [request.delegate percentCompleted:request.percentCompleted forRequest:request];
@@ -168,22 +160,23 @@ dispatch_queue_t dispatch_get_local_queue()
     }
     
     // return no data, but this isn't an error... just the end of the file
-    else if (bytesThisIteration == 0) {
+    else if (self.bytesThisIteration == 0) {
         return [NSData data]; // returns empty data object - means no error, but no data
     }
+    
     // otherwise we had an error, return an error
-    [self streamError: request errorCode:kGRFTPClientCantReadStream];
+    [self streamError:request errorCode:kGRFTPClientCantReadStream];
     
     return nil;
 }
 
 - (BOOL)write:(GRRequest *)request data:(NSData *)data
 {
-    bytesThisIteration = [writeStream write:[data bytes] maxLength:[data length]];
-    bytesTotal += bytesThisIteration;
+    self.bytesThisIteration = [self.writeStream write:[data bytes] maxLength:[data length]];
+    self.bytesTotal += self.bytesThisIteration;
             
-    if (bytesThisIteration > 0) {
-        request.percentCompleted = bytesTotal / request.maximumSize;
+    if (self.bytesThisIteration > 0) {
+        request.percentCompleted = self.bytesTotal / request.maximumSize;
         if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
             [request.delegate percentCompleted:request.percentCompleted forRequest:request];
         }
@@ -191,11 +184,11 @@ dispatch_queue_t dispatch_get_local_queue()
         return YES;
     }
     
-    if (bytesThisIteration == 0) {
+    if (self.bytesThisIteration == 0) {
         return YES;
     }
     
-    [self streamError: request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
+    [self streamError:request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
 
     return NO;
 }
@@ -204,28 +197,28 @@ dispatch_queue_t dispatch_get_local_queue()
 {
     request.error = [[GRError alloc] init];
     request.error.errorCode = errorCode;
-    [request.delegate requestFailed: request];
-    [request.streamInfo close: request];
+    [request.delegate requestFailed:request];
+    [request.streamInfo close:request];
 }
 
 - (void)streamComplete:(GRRequest *)request
 {
-    [request.delegate requestCompleted: request];
-    [request.streamInfo close: request];
+    [request.delegate requestCompleted:request];
+    [request.streamInfo close:request];
 }
 
 - (void)close:(GRRequest *)request
 {
-    if (readStream) {
-        [readStream close];
-        [readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        readStream = nil;
+    if (self.readStream) {
+        [self.readStream close];
+        [self.readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        self.readStream = nil;
     }
     
-    if (writeStream) {
-        [writeStream close];
-        [writeStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        writeStream = nil;
+    if (self.writeStream) {
+        [self.writeStream close];
+        [self.writeStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        self.writeStream = nil;
     }
     
     request.streamInfo = nil;

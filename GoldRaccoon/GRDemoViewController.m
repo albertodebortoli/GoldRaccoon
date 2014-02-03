@@ -93,9 +93,9 @@
 
 #pragma mark - GRRequestsManagerDelegate
 
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didStartRequest:(id<GRRequestProtocol>)request
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didScheduleRequest:(id<GRRequestProtocol>)request
 {
-    NSLog(@"requestsManager:didStartRequest:");
+    NSLog(@"requestsManager:didScheduleRequest:");
 }
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteListingRequest:(id<GRRequestProtocol>)request listing:(NSArray *)listing
