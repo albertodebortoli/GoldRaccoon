@@ -164,4 +164,9 @@
  */
 - (BOOL)cancelRequest:(id<GRRequestProtocol>)request;
 
+/**
+ @brief Counts how many requests in the queue remainings.
+ */
+- (int) remainingRequests;
+
 @end
