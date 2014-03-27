@@ -291,6 +291,11 @@
     
     if (self.currentRequest == nil) {
         [self stopAndCancelAllRequests];
+        
+        if ([self.delegate respondsToSelector:@selector(didCompleteQueue:)]) {
+            [self.delegate didCompleteQueue:self];
+        }
+        
         return;
     }
     
