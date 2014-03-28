@@ -103,6 +103,10 @@
     return [self.requestQueue removeObject:request];
 }
 
+- (int) remainingRequests {
+    return self.requestQueue.count;
+}
+
 #pragma mark - FTP Actions
 
 - (id<GRRequestProtocol>)addRequestForListDirectoryAtPath:(NSString *)path
@@ -291,6 +295,11 @@
     
     if (self.currentRequest == nil) {
         [self stopAndCancelAllRequests];
+        
+        if ([self.delegate respondsToSelector:@selector(didCompleteQueue:)]) {
+            [self.delegate didCompleteQueue:self];
+        }
+        
         return;
     }
     

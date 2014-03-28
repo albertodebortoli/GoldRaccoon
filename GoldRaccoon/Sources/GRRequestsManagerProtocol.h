@@ -86,6 +86,12 @@
  */
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(id<GRRequestProtocol>)request withError:(NSError *)error;
 
+/**
+ @brief Called to notify the queue is empty.
+ @param requestsManager The requests manager.
+ */
+- (void)didCompleteQueue:(id<GRRequestsManagerProtocol>)requestsManager;
+
 @end
 
 /** Protocol interface for object GRRequestsManager objects. */
@@ -157,5 +163,10 @@
  @return YES if the operation succeeded, NO otherwise.
  */
 - (BOOL)cancelRequest:(id<GRRequestProtocol>)request;
+
+/**
+ @brief Counts how many requests in the queue remainings.
+ */
+- (int) remainingRequests;
 
 @end
