@@ -8,10 +8,14 @@
 
 #import "GRQueue.h"
 
+@interface GRQueue ()
+
+@property (nonatomic, assign) NSUInteger count;
+@property (nonatomic, strong) NSMutableArray *items;
+
+@end
+
 @implementation GRQueue
-{
-	NSMutableArray *_items;
-}
 
 - (instancetype)init
 {
@@ -25,26 +29,27 @@
 
 - (void)enqueue:(id)object
 {
-	[_items addObject:object];
-	_count = [_items count];
+	[self.items addObject:object];
+	self.count = [self.items count];
 }
 
 - (id)dequeue
 {
 	id obj = nil;
-	if ([_items count]) {
-		obj = _items[0];
-		[_items removeObjectAtIndex:0];
+	
+    if ([self.items count]) {
+		obj = self.items[0];
+		[self.items removeObjectAtIndex:0];
 	}
-    _count = [_items count];
     
-	return obj;
+    self.count = [self.items count];
+    return obj;
 }
 
 - (BOOL)removeObject:(id)object
 {
-    if ([_items containsObject:object]) {
-        [_items removeObject:object];
+    if ([self.items containsObject:object]) {
+        [self.items removeObject:object];
         return YES;
     }
     
@@ -53,13 +58,13 @@
 
 - (NSArray *)allItems
 {
-    return _items;
+    return self.items;
 }
 
 - (void)clear
 {
-	[_items removeAllObjects];
-	_count = 0;
+	[self.items removeAllObjects];
+	self.count = 0;
 }
 
 @end

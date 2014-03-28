@@ -95,7 +95,7 @@
             NSUInteger  offset = 0;
             CFIndex     parsedBytes;
             uint8_t *bytes = (uint8_t *)[self.receivedData bytes];
-            int totalbytes = [self.receivedData length];
+            NSUInteger totalbytes = [self.receivedData length];
             
             do {
                 CFDictionaryRef listingEntity = NULL;

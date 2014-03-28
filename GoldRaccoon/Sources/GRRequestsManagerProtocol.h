@@ -87,10 +87,10 @@
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(id<GRRequestProtocol>)request withError:(NSError *)error;
 
 /**
- @brief Called to notify the queue is empty.
+ @brief Called to notify the delegate that the queue has been emptied.
  @param requestsManager The requests manager.
  */
-- (void)didCompleteQueue:(id<GRRequestsManagerProtocol>)requestsManager;
+- (void)requestsManagerDidCompleteQueue:(id<GRRequestsManagerProtocol>)requestsManager;
 
 @end
 
@@ -165,8 +165,8 @@
 - (BOOL)cancelRequest:(id<GRRequestProtocol>)request;
 
 /**
- @brief Counts how many requests in the queue remainings.
+ @brief Returns the number of requests currently in the queue.
  */
-- (int) remainingRequests;
+- (NSUInteger)remainingRequests;
 
 @end

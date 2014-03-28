@@ -25,7 +25,6 @@
 		D3622E00177F3357009DEEEB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D3622DFF177F3357009DEEEB /* Default.png */; };
 		D3622E02177F3357009DEEEB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3622E01177F3357009DEEEB /* Default@2x.png */; };
 		D3622E04177F3357009DEEEB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3622E03177F3357009DEEEB /* Default-568h@2x.png */; };
-		D3622E0C177F3357009DEEEB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622E0B177F3357009DEEEB /* SenTestingKit.framework */; };
 		D3622E0D177F3357009DEEEB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622DED177F3357009DEEEB /* UIKit.framework */; };
 		D3622E0E177F3357009DEEEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3622DEF177F3357009DEEEB /* Foundation.framework */; };
 		D3622E16177F3357009DEEEB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3622E14177F3357009DEEEB /* InfoPlist.strings */; };
@@ -81,8 +80,7 @@
 		D3622DFF177F3357009DEEEB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		D3622E01177F3357009DEEEB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D3622E03177F3357009DEEEB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		D3622E0A177F3357009DEEEB /* GoldRaccoonTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoldRaccoonTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D3622E0B177F3357009DEEEB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		D3622E0A177F3357009DEEEB /* GoldRaccoonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoldRaccoonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3622E13177F3357009DEEEB /* GoldRaccoonTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoldRaccoonTests-Info.plist"; sourceTree = "<group>"; };
 		D3622E15177F3357009DEEEB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3622E17177F3357009DEEEB /* GoldRaccoonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoldRaccoonTests.h; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3622E0C177F3357009DEEEB /* SenTestingKit.framework in Frameworks */,
 				D3622E0D177F3357009DEEEB /* UIKit.framework in Frameworks */,
 				D3622E0E177F3357009DEEEB /* Foundation.framework in Frameworks */,
 			);
@@ -174,7 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				D3622DEA177F3357009DEEEB /* GoldRaccoon.app */,
-				D3622E0A177F3357009DEEEB /* GoldRaccoonTests.octest */,
+				D3622E0A177F3357009DEEEB /* GoldRaccoonTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,7 +183,6 @@
 				D3622DED177F3357009DEEEB /* UIKit.framework */,
 				D3622DEF177F3357009DEEEB /* Foundation.framework */,
 				D3622DF1177F3357009DEEEB /* CoreGraphics.framework */,
-				D3622E0B177F3357009DEEEB /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -287,8 +283,8 @@
 			);
 			name = GoldRaccoonTests;
 			productName = GoldRaccoonTests;
-			productReference = D3622E0A177F3357009DEEEB /* GoldRaccoonTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = D3622E0A177F3357009DEEEB /* GoldRaccoonTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -297,6 +293,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = GR;
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Alberto De Bortoli";
 			};
@@ -501,15 +498,15 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GoldRaccoon.app/GoldRaccoon";
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\\\"$(SDKROOT)/Developer/Library/Frameworks\\\"",
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoldRaccoon/GoldRaccoon-Prefix.pch";
 				INFOPLIST_FILE = "GoldRaccoonTests/GoldRaccoonTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -518,15 +515,15 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GoldRaccoon.app/GoldRaccoon";
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\\\"$(SDKROOT)/Developer/Library/Frameworks\\\"",
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoldRaccoon/GoldRaccoon-Prefix.pch";
 				INFOPLIST_FILE = "GoldRaccoonTests/GoldRaccoonTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

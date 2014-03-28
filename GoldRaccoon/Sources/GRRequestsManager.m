@@ -103,8 +103,9 @@
     return [self.requestQueue removeObject:request];
 }
 
-- (int) remainingRequests {
-    return self.requestQueue.count;
+- (NSUInteger)remainingRequests
+{
+    return [self.requestQueue count];
 }
 
 #pragma mark - FTP Actions
@@ -296,8 +297,8 @@
     if (self.currentRequest == nil) {
         [self stopAndCancelAllRequests];
         
-        if ([self.delegate respondsToSelector:@selector(didCompleteQueue:)]) {
-            [self.delegate didCompleteQueue:self];
+        if ([self.delegate respondsToSelector:@selector(requestsManagerDidCompleteQueue:)]) {
+            [self.delegate requestsManagerDidCompleteQueue:self];
         }
         
         return;
