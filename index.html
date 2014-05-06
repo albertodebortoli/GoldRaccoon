@@ -32,7 +32,7 @@
       <section>
         <div id="title">
           <h1>GoldRaccoon</h1>
-          <p>An iOS component that allow you to connect to a FTP service and perform the operations you need.</p>
+          <p>The iOS component to connect to a FTP service and perform the operations you need.</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/albertodebortoli">albertodebortoli</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
@@ -41,7 +41,7 @@
         <h2>
 <a name="general-notes" class="anchor" href="#general-notes"><span class="octicon octicon-link"></span></a>General Notes</h2>
 
-<p><a href="http://albertodebortoli.github.io/GoldRaccoon/">GoldRaccoon</a> is a iOS component that allow you to connect to a FTP service and do the following:</p>
+<p><a href="http://albertodebortoli.github.io/GoldRaccoon/">GoldRaccoon</a> is the iOS component to connect to a FTP service and do the following:</p>
 
 <ul>
 <li>  Download a file</li>
@@ -82,24 +82,24 @@
 <li>add CFNetwork framework</li>
 <li>import <code>GRRequestsManager.h</code> in your class</li>
 <li>add a property for the manager</li>
-</ul><div class="highlight"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">GRRequestsManager</span> <span class="o">*</span><span class="n">requestsManager</span><span class="p">;</span>
+</ul><div class="highlight highlight-objective-c"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">GRRequestsManager</span> <span class="o">*</span><span class="n">requestsManager</span><span class="p">;</span>
 </pre></div>
 
 <ul>
 <li>setup the manager somewhere (with hostname, username and password)</li>
-</ul><div class="highlight"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GRRequestsManager</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithHostname</span><span class="o">:&lt;</span><span class="n">hostname</span><span class="o">&gt;</span>
+</ul><div class="highlight highlight-objective-c"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GRRequestsManager</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithHostname</span><span class="o">:&lt;</span><span class="n">hostname</span><span class="o">&gt;</span>
                                                               <span class="nl">user:</span><span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span>
                                                           <span class="nl">password:</span><span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">];</span>
 </pre></div>
 
 <ul>
 <li>optionally make your class conform to <code>GRRequestsManagerDelegate</code>, implement the delegate methods (basically success, failure and progress callbacks) and set your instance of this class as delegate for the manager</li>
-</ul><div class="highlight"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</ul><div class="highlight highlight-objective-c"><pre><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
 </pre></div>
 
 <ul>
 <li>add the requests to the manager using the following methods:</li>
-</ul><div class="highlight"><pre><span class="nl">addRequestForListDirectoryAtPath:</span>
+</ul><div class="highlight highlight-objective-c"><pre><span class="nl">addRequestForListDirectoryAtPath:</span>
 <span class="nl">addRequestForCreateDirectoryAtPath:</span>
 <span class="nl">addRequestForDeleteFileAtPath:</span>
 <span class="nl">addRequestForDeleteDirectoryAtPath:</span>
@@ -109,7 +109,7 @@
 
 <ul>
 <li>start the manager</li>
-</ul><div class="highlight"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="n">startProcessingRequests</span><span class="p">];</span>
+</ul><div class="highlight highlight-objective-c"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">requestsManager</span> <span class="n">startProcessingRequests</span><span class="p">];</span>
 </pre></div>
       </section>
 
