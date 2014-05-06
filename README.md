@@ -2,7 +2,7 @@
 
 ## General Notes
 
-[GoldRaccoon](http://albertodebortoli.github.io/GoldRaccoon/) is a iOS component that allow you to connect to a FTP service and do the following:
+[GoldRaccoon](http://albertodebortoli.github.io/GoldRaccoon/) is the iOS component to connect to a FTP service and do the following:
 
 *	Download a file
 *	Upload a file
