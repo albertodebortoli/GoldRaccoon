@@ -30,6 +30,11 @@
 @synthesize localFilePath = _localFilePath;
 @synthesize fullRemotePath = _fullRemotePath;
 
+- (NSString *)rawPath
+{
+    return _path;
+}
+
 - (void)start
 {
     self.maximumSize = LONG_MAX;
@@ -44,7 +49,7 @@
     // we first list the directory to see if our folder is up on the server
     self.listingRequest = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
 	self.listingRequest.passiveMode = self.passiveMode;
-    self.listingRequest.path = [self.path stringByDeletingLastPathComponent];
+    self.listingRequest.path = [[self rawPath] stringByDeletingLastPathComponent];
     [self.listingRequest start];
 }
 
