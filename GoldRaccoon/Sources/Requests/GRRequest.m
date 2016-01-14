@@ -157,4 +157,8 @@
     self.streamInfo.cancelDoesNotCallDelegate = cancelDoesNotCallDelegate;
 }
 
+- (NSString *)dirname {
+    return [_path stringByDeletingLastPathComponent];
+}
+
 @end
