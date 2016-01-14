@@ -44,7 +44,7 @@
     // we first list the directory to see if our folder is up on the server
     self.listingRequest = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
 	self.listingRequest.passiveMode = self.passiveMode;
-    self.listingRequest.path = [self.path stringByDeletingLastPathComponent];
+    self.listingRequest.path = self.dirname;
     [self.listingRequest start];
 }
 

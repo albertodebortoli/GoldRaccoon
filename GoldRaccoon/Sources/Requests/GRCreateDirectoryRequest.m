@@ -47,7 +47,7 @@
     
     // we first list the directory to see if our folder is up already
     self.listrequest = [[GRListingRequest alloc] initWithDelegate:self datasource:self];
-    self.listrequest.path = [self.path stringByDeletingLastPathComponent];
+    self.listrequest.path = self.dirname;
     [self.listrequest start];
 }
 

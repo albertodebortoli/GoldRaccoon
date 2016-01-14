@@ -34,6 +34,8 @@
 @property (nonatomic, assign) BOOL didOpenStream;               // whether the stream opened or not
 @property (nonatomic, assign) BOOL cancelDoesNotCallDelegate;   // cancel closes stream without calling delegate
 
+@property (nonatomic, readonly) NSString *dirname;
+
 - (instancetype)initWithDelegate:(id<GRRequestDelegate>)aDelegate datasource:(id<GRRequestDataSource>)aDatasource;
 
 @end
