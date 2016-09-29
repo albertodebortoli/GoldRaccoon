@@ -41,7 +41,7 @@
     if ([self hostnameForRequest:self] == nil) {
         self.error = [[GRError alloc] init];
         self.error.errorCode = kGRFTPClientHostnameIsNil;
-        [self.delegate requestFailed:self];
+        [self.delegate requestFailed:self originRequest:self];
         return;
     }
     
@@ -68,9 +68,9 @@
 }
 
 
-- (void)requestFailed:(GRRequest *)request
+- (void)requestFailed:(GRRequest *)request originRequest:(GRRequest *)originRequest
 {
-    [self.delegate requestFailed:request];
+    [self.delegate requestFailed:request originRequest:self];
 }
 
 - (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request

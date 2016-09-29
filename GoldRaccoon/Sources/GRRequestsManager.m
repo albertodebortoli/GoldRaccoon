@@ -205,11 +205,12 @@
     [self _processNextRequest];
 }
 
-- (void)requestFailed:(GRRequest *)request
+- (void)requestFailed:(GRRequest *)request originRequest:(GRRequest *)originRequest
 {
     if ([self.delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)]) {
         NSError *error = [NSError errorWithDomain:@"com.albertodebortoli.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
-        [self.delegate requestsManager:self didFailRequest:request withError:error];
+//        [self.delegate requestsManager:self didFailRequest:request withError:error];
+      [self.delegate requestsManager:self didFailRequest:originRequest withError:error];
     }
     
     [self _processNextRequest];

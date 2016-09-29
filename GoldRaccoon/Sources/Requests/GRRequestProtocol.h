@@ -49,7 +49,7 @@
 
 @required
 - (void)requestCompleted:(id<GRRequestProtocol>)request;
-- (void)requestFailed:(id<GRRequestProtocol>)request;
+- (void)requestFailed:(id<GRRequestProtocol>)request originRequest:(id<GRRequestProtocol>)originRequest;
 
 @optional
 - (void)percentCompleted:(float)percent forRequest:(id<GRRequestProtocol>)request;
