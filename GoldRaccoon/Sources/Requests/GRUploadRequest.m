@@ -71,9 +71,9 @@
     [self.streamInfo openWrite:self];
 }
 
-- (void)requestFailed:(GRRequest *)request
+- (void)requestFailed:(GRRequest *)request originRequest:(GRRequest *)originRequest
 {
-    [self.delegate requestFailed:request];
+    [self.delegate requestFailed:request originRequest:self];
 }
 
 - (BOOL)shouldOverwriteFile:(NSString *)filePath forRequest:(id<GRDataExchangeRequestProtocol>)request

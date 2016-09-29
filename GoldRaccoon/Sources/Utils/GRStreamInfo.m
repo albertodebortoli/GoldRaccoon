@@ -42,7 +42,7 @@
     if ([request.dataSource hostnameForRequest:request] == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
-        [request.delegate requestFailed:request];
+        [request.delegate requestFailed:request originRequest:request];
         [request.streamInfo close:request];
         return;
     }
@@ -63,7 +63,7 @@
     if (self.readStream == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
-        [request.delegate requestFailed:request];
+        [request.delegate requestFailed:request originRequest:request];
         [request.streamInfo close:request];
         return;
     }
@@ -77,7 +77,7 @@
         if (!request.didOpenStream && request.error == nil) {
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
-            [request.delegate requestFailed:request];
+            [request.delegate requestFailed:request originRequest:request];
             [request.streamInfo close:request];
         }
     });
@@ -88,7 +88,7 @@
     if ([request.dataSource hostnameForRequest:request] == nil) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientHostnameIsNil;
-        [request.delegate requestFailed:request];
+        [request.delegate requestFailed:request originRequest:request];
         [request.streamInfo close:request];
         return;
     }
@@ -109,7 +109,7 @@
     if (!self.writeStream) {
         request.error = [[GRError alloc] init];
         request.error.errorCode = kGRFTPClientCantOpenStream;
-        [request.delegate requestFailed:request];
+        [request.delegate requestFailed:request originRequest:request];
         [request.streamInfo close:request];
         return;
     }
@@ -123,7 +123,7 @@
         if (!request.didOpenStream && (request.error == nil)) {
             request.error = [[GRError alloc] init];
             request.error.errorCode = kGRFTPClientStreamTimedOut;
-            [request.delegate requestFailed:request];
+            [request.delegate requestFailed:request originRequest:request];
             [request.streamInfo close:request];
         }
     });
@@ -203,7 +203,7 @@
 {
     request.error = [[GRError alloc] init];
     request.error.errorCode = errorCode;
-    [request.delegate requestFailed:request];
+    [request.delegate requestFailed:request originRequest:request];
     [request.streamInfo close:request];
 }
 
